@@ -1,0 +1,11 @@
+.network-summary th {
+    font-weight: bold;
+}
+
+.network-summary tr {
+    border-bottom: 1px solid #d3d3d3;
+}
+
+.network-summary tbody tr:nth-child(odd) {
+    background-color: aliceblue;
+}
