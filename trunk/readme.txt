@@ -1,6 +1,6 @@
 === Network Summary ===
 Contributors: jokr
-Tags: description, multi-site, overview
+Tags: description, multisite, overview
 Requires at least: 3.5.2
 Tested up to: 3.6.0
 Stable tag: trunk
