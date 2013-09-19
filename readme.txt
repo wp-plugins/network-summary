@@ -35,6 +35,11 @@ Currently there are three shortcodes available:
 
 == Changelog ==
 
+= 1.1.2 =
+* Table view is now default layout for the `[netview]` shortcode.
+* `[netview]` shortcode does no longer display recent posts header.
+* Dates and times in shortcode output now are formatted according to the original site.
+
 = 1.1.1 =
 * Renamed the plugin from multisite overview to network summary.
 * Settings page in the network admin area now displays additional info about each blog.

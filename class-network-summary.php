@@ -4,7 +4,7 @@ class Network_Summary
 {
 	const SITE_SETTING_NAME = 'network_summary';
 	const NETWORK_SETTING_NAME = 'network_summary';
-	const CURRENT_VERSION = '1.1.1';
+	const CURRENT_VERSION = '1.1.2';
 
 	/**
 	 * Construct the plugin object by registering actions and shortcodes.
@@ -67,6 +67,8 @@ class Network_Summary
 					'multisite_overview' ) );
 				delete_blog_option( $site_id, 'multisite_overview' );
 			}
+		}
+		if( $old_version !== Network_Summary::CURRENT_VERSION ) {
 			update_site_option( 'network_summary_version', Network_Summary::CURRENT_VERSION );
 		}
 	}
@@ -255,7 +257,7 @@ class Network_Summary
 			'exclude' => array(),
 			'numposts' => 2,
 			'sort' => 'abc',
-			'layout' => 'grid'
+			'layout' => 'table'
 		), $atts, 'netview' );
 
 		$param_hash = md5( serialize( $params ) );
@@ -292,6 +294,8 @@ class Network_Summary
 
 			$this->sort_sites( $sites, $params['sort'] );
 
+			$dateFormat = get_option( 'date_format' );
+
 			$result = '<div class="netview">';
 			$i = 0;
 			if ( 0 === strcmp( $params['layout'], 'table' ) ) {
@@ -302,7 +306,7 @@ class Network_Summary
 				$name = '<h2 class="site-title"><a href="' . site_url() . '">' . get_bloginfo() . '</a></h2>';
 				$description = wpautop( do_shortcode( $this->get_plugin_option( 'site_description' ) ) );
 				if ( $params['numposts'] > 0 ) {
-					$recent_posts = $this->get_recent_posts( $params['numposts'] );
+					$recent_posts = $this->get_recent_posts( $params['numposts'], $dateFormat );
 				} else {
 					$recent_posts = '';
 				}
@@ -356,6 +360,8 @@ class Network_Summary
 				return '<p><b>Illegal parameter <code>numposts</code> (must be integer value greater or equal than 0).</b></p>';
 			}
 
+			$dateFormat = get_option( 'date_format' );
+
 			switch_to_blog( $params['id'] );
 
 			$result = '<div class="netview-single"><h2 class="site-title"><a href="' . site_url() . '">' .
@@ -365,7 +371,8 @@ class Network_Summary
 			}
 			$result .= wpautop( do_shortcode( $this->get_plugin_option( 'site_description' ) ) );
 			if ( $params['numposts'] > 0 ) {
-				$result .= $this->get_recent_posts( $params['numposts'] );
+				$result .= '<h4>Recent Posts</h4>';
+				$result .= $this->get_recent_posts( $params['numposts'], $dateFormat );
 			}
 			$result .= '</div></div>';
 
@@ -448,15 +455,14 @@ class Network_Summary
 		return $shared_sites;
 	}
 
-	private function get_recent_posts( $number_of_posts ) {
-		$result = '<h4>Most recent posts</h4>
-		<ul class="site-recent-post">';
+	private function get_recent_posts( $number_of_posts, $dateFormat ) {
+		$result = '<ul class="site-recent-post">';
 
 		$recent_posts = wp_get_recent_posts( array('numberposts' => $number_of_posts, 'post_status' => 'publish') );
 		foreach ( $recent_posts as $post ) {
 			$result .= '<li><a href="' . get_permalink( $post["ID"] ) . '" title="Read ' . $post["post_title"] . '.">'
 				. $post["post_title"] . '</a><span class="date">'
-				. date_i18n( get_option( 'date_format' ), strtotime( $post["post_date"] ) )
+				. date_i18n( $dateFormat, strtotime( $post["post_date"] ) )
 				. '</span></li>';
 		}
 		$result .= '</ul>';
