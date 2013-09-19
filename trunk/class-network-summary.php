@@ -4,7 +4,7 @@ class Network_Summary
 {
 	const SITE_SETTING_NAME = 'network_summary';
 	const NETWORK_SETTING_NAME = 'network_summary';
-	const CURRENT_VERSION = '1.1.0';
+	const CURRENT_VERSION = '1.1.1';
 
 	/**
 	 * Construct the plugin object by registering actions and shortcodes.
@@ -63,7 +63,7 @@ class Network_Summary
 			update_site_option( Network_Summary::NETWORK_SETTING_NAME, get_site_option( 'multisite_overview_network' ) );
 			delete_site_option( 'multisite_overview_network' );
 			foreach ( $this->list_sites() as $site_id ) {
-				update_blog_option( $site_id, Network_Summary::NETWORK_SETTING_NAME, get_blog_option( $site_id,
+				update_blog_option( $site_id, Network_Summary::SITE_SETTING_NAME, get_blog_option( $site_id,
 					'multisite_overview' ) );
 				delete_blog_option( $site_id, 'multisite_overview' );
 			}
@@ -324,7 +324,7 @@ class Network_Summary
 			}
 
 			$result .= '</div>';
-			//set_transient( 'netview_overview_' . $param_hash, $result, 7200 );
+			set_transient( 'netview_overview_' . $param_hash, $result, 7200 );
 		}
 		return $result;
 	}
