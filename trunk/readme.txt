@@ -19,9 +19,38 @@ provide a summary of the site's content.
 
 Currently there are three shortcodes available:
 
-* `[netview]` displays all the available sites with a short description and the most recent posts.
-* `[netview-single]` displays one site with a custom image and in a more prominent way.
-* `[netview-all]` displays all visible sites in form of an index in alphabetical order without any additional information.
+= Network Overview =
+
+_Shortcode:_ `[netview]`
+
+Description: Displays a rather detailed overview of a specified set of sites. Can include images and most recent posts. Offers two layouts and two ways of sorting them.
+
+Options:
+
+* `include` (optional, defaults: all available) expects a comma separated list of site ids. It will only will list these sites.
+* `exclude` (optional) expects a comma separated list of site ids. It will list all sites except the listed ones.
+* `numposts` (optional, default: 2) expects a number. Limits the number of most recent published posts displayed.
+* `sort` (optional, default: 'abc') expects either 'abc' or 'posts'. 'abc' means alphabetical sorting. 'posts' will sort the sites according to their most recent post.
+* `layout` (optional, default: 'table') expects either 'grid' or 'table'. Defines the layout of the list. Grid uses two columns. Table uses one row per site.
+* `images` (optional, default: 'true') expects either 'true' or 'false'. Defines whether header images of the sites are displayed if available.
+
+Example:
+
+    [netview order=posts layout=grid numposts=3 images=false]
+
+Lists all visible sites in a grid layout without images and with the three most recent posts. The list is sorted by the site with the most recent post first.
+
+= Network Single View =
+
+Shortcode: `[netview-single]`
+
+Description: Displays one site with a custom image and in a more prominent way.
+
+= Network Index =
+
+Shortcode: `[netview-all]`
+
+Description: Displays all visible sites in form of an index in alphabetical order without any additional information.
 
 == Installation ==
 
@@ -34,6 +63,10 @@ Currently there are three shortcodes available:
 2. The settings page in the network admin area.
 
 == Changelog ==
+
+= 1.1.4 =
+* Added the display of header pictures.
+* Extended documentation of options for main short tag.
 
 = 1.1.3 =
 * Ensured compatibility with WordPress 3.8.
