@@ -4,7 +4,7 @@ class Network_Summary
 {
 	const SITE_SETTING_NAME = 'network_summary';
 	const NETWORK_SETTING_NAME = 'network_summary';
-	const CURRENT_VERSION = '1.1.3';
+	const CURRENT_VERSION = '1.1.4';
 
 	/**
 	 * Construct the plugin object by registering actions and shortcodes.
@@ -278,7 +278,9 @@ class Network_Summary
 			'exclude' => array(),
 			'numposts' => 2,
 			'sort' => 'abc',
-			'layout' => 'table'
+			'layout' => 'table',
+			'images' => 'true',
+			'rss' => 'true'
 		), $atts, 'netview' );
 
 		$param_hash = md5( serialize( $params ) );
@@ -294,6 +296,13 @@ class Network_Summary
 				$params['exclude'] = explode( ',', $params['exclude'] );
 			}
 
+			$params['include'] = array_intersect( $params['include'], $this->get_shared_sites() );
+			$sites = array_diff( $params['include'], $params['exclude'] );
+
+			if ( empty($sites) ) {
+				return '<p><b>No sites to display.</b></p>';
+			}
+
 			if ( ! is_numeric( $params['numposts'] ) || $params['numposts'] < 0 ) {
 				return '<p><b>Illegal parameter <code>numposts</code> (must be integer value greater or equal than 0).</b></p>';
 			}
@@ -302,18 +311,17 @@ class Network_Summary
 				return '<p><b>Illegal parameter <code>sort</code> (must be <code>abc</code> or <code>posts</code>).</b></p>';
 			}
 
+			$this->sort_sites( $sites, $params['sort'] );
+
 			if ( strcmp( $params['layout'], 'grid' ) !== 0 && strcmp( $params['layout'], 'table' ) !== 0 ) {
 				return '<p><b>Illegal parameter <code>layout</code> (must be <code>grid</code> or <code>table</code>).</b></p>';
 			}
 
-			$params['include'] = array_intersect( $params['include'], $this->get_shared_sites() );
-			$sites = array_diff( $params['include'], $params['exclude'] );
-
-			if ( empty($sites) ) {
-				return '<p><b>No sites to display.</b></p>';
+			if ( strcmp( $params['images'], 'true' ) !== 0 && strcmp( $params['images'], 'false' ) !== 0 ) {
+				return '<p><b>Illegal parameter <code>images</code> (must be <code>true</code> or <code>false</code>).</b></p>';
+			} else {
+				$params['images'] = $params['images'] === 'true';
 			}
-
-			$this->sort_sites( $sites, $params['sort'] );
 
 			$dateFormat = get_option( 'date_format' );
 
@@ -326,6 +334,11 @@ class Network_Summary
 				switch_to_blog( $site_id );
 				$name = '<h2 class="site-title"><a href="' . site_url() . '">' . get_bloginfo() . '</a></h2>';
 				$description = wpautop( do_shortcode( $this->get_plugin_option( 'site_description' ) ) );
+				if ( $params['images'] && get_header_image() ) {
+					$picture = '<a href="' . site_url() . '"><img src="' . get_header_image() . '"></a>';
+				} else {
+					$picture = '';
+				}
 				if ( $params['numposts'] > 0 ) {
 					$recent_posts = $this->get_recent_posts( $params['numposts'], $dateFormat );
 				} else {
@@ -334,10 +347,17 @@ class Network_Summary
 
 				if ( 0 === strcmp( $params['layout'], 'grid' ) ) {
 					$result .= '<div class="netview-site ' . (($i ++ % 2 == 0) ? 'even' : 'odd') . '">';
-					$result .= $name . $description . $recent_posts;
+					$result .= $name;
+					if ( $params['images'] && get_header_image() ) {
+						$result .= '<span class="header-image">' . $picture . '</span>';
+					}
+					$result .= $description . $recent_posts;
 					$result .= '</div>';
 				} else if ( 0 === strcmp( $params['layout'], 'table' ) ) {
-					$result .= '<tr><td>';
+					if ( $params['images'] && get_header_image() ) {
+						$result .= '<tr class="header-image"><td colspan="2">' . $picture . '</td>';
+					}
+					$result .= '<tr class="site-info"><td>';
 					$result .= $name . $description;
 					$result .= '</td><td>' . $recent_posts . '</td></tr>';
 				}
@@ -484,7 +504,7 @@ class Network_Summary
 		$recent_posts = wp_get_recent_posts( array('numberposts' => $number_of_posts, 'post_status' => 'publish') );
 		foreach ( $recent_posts as $post ) {
 			$result .= '<li><a href="' . get_permalink( $post["ID"] ) . '" title="Read ' . $post["post_title"] . '.">'
-				. $post["post_title"] . '</a><span class="date">'
+				. $post["post_title"] . '</a><span class="netview-date">'
 				. date_i18n( $dateFormat, strtotime( $post["post_date"] ) )
 				. '</span></li>';
 		}

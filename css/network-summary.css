@@ -12,12 +12,26 @@
     clear: right;
 }
 
+.netview-site .header-image img {
+    max-width: 100%;
+    border: 1px solid black;
+    margin-top: 10px;
+}
+
+tr.site-info {
+    border-bottom: 1px dotted black;
+}
+
+#content table.netview-site p {
+    margin: 0;
+}
+
 #content table.netview-site, #content table.netview-site td {
     border: 0;
     padding: 0;
 }
 
-#content table.netview-site h2 {
+#content table.netview-site h2.site-title {
     margin: 0 0 10px 0;
     font-size: 1.3em;
 }
@@ -26,7 +40,7 @@ table.netview-site tr td:first-of-type {
     width: 60%;
 }
 
-#content .date {
+#content .netview-date {
     margin-left: 5px;
     font-size: .8em;
     font-style: italic;
