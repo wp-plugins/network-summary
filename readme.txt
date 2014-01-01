@@ -2,7 +2,7 @@
 Contributors: jokr
 Tags: description, multisite, overview
 Requires at least: 3.5.2
-Tested up to: 3.6.0
+Tested up to: 3.8.0
 Stable tag: trunk
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -34,6 +34,12 @@ Currently there are three shortcodes available:
 2. The settings page in the network admin area.
 
 == Changelog ==
+
+= 1.1.3 =
+* Ensured compatibility with WordPress 3.8.
+* Minor layout tweaks in the network admin screen.
+* Updated code documentation.
+* Fixed a anonymous function call that prevented compatibility with PHP 5.2.
 
 = 1.1.2 =
 * Table view is now default layout for the `[netview]` shortcode.

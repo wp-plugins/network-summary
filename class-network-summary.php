@@ -4,7 +4,7 @@ class Network_Summary
 {
 	const SITE_SETTING_NAME = 'network_summary';
 	const NETWORK_SETTING_NAME = 'network_summary';
-	const CURRENT_VERSION = '1.1.2';
+	const CURRENT_VERSION = '1.1.3';
 
 	/**
 	 * Construct the plugin object by registering actions and shortcodes.
@@ -23,9 +23,7 @@ class Network_Summary
 		add_action( 'admin_post_update_network_summary_network_settings',
 			array(&$this, 'update_network_settings') );
 
-		add_action( 'widgets_init', function () {
-			register_widget( 'Site_Description_Field_Widget' );
-		} );
+		add_action( 'widgets_init', array(&$this, 'register_widgets') );
 	}
 
 	/**
@@ -68,7 +66,7 @@ class Network_Summary
 				delete_blog_option( $site_id, 'multisite_overview' );
 			}
 		}
-		if( $old_version !== Network_Summary::CURRENT_VERSION ) {
+		if ( $old_version !== Network_Summary::CURRENT_VERSION ) {
 			update_site_option( 'network_summary_version', Network_Summary::CURRENT_VERSION );
 		}
 	}
@@ -100,6 +98,13 @@ class Network_Summary
 	}
 
 	/**
+	 * Hook for registering the widgets.
+	 */
+	public function register_widgets() {
+		register_widget( 'Site_Description_Field_Widget' );
+	}
+
+	/**
 	 * Callback for the settings page for the network admin.
 	 */
 	public function network_settings_page() {
@@ -107,7 +112,7 @@ class Network_Summary
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
 
-		wp_register_style( 'network_summary_admin', plugins_url( 'network-summary-admin.css', __FILE__ ) );
+		wp_register_style( 'network_summary_admin', plugins_url( '/css/network-summary-admin.css', __FILE__ ) );
 		wp_enqueue_style( 'network_summary_admin' );
 
 		include dirname( __FILE__ ) . '/templates/network-settings.php';
@@ -158,6 +163,9 @@ class Network_Summary
 		register_setting( 'network_summary_settings', Network_Summary::NETWORK_SETTING_NAME );
 	}
 
+	/**
+	 * Renders the section on the 'Reading' settings page.
+	 */
 	public function render_sharing_settings_section() {
 		if ( $this->is_user_allowed_to_edit_site_settings() )
 			echo '<p>There may be times when the network wants to list all sites, including their recent posts. Would you like
@@ -168,6 +176,10 @@ class Network_Summary
 				get_site_option( 'admin_email' ) . '">Contact</a> them, if you would like to change this setting.';
 	}
 
+	/**
+	 * Renders the setting on the 'Reading' settings page whether the page should be listed or not if the user is allowed
+	 * to edit this setting. Otherwise it just lists the current status.
+	 */
 	public function render_share_site_setting() {
 		$option = $this->get_plugin_option( 'share_site' );
 
@@ -195,6 +207,9 @@ class Network_Summary
 		}
 	}
 
+	/**
+	 * Renders the editor for the description of the site.
+	 */
 	public function render_description_setting() {
 		$option = $this->get_plugin_option( 'site_description' );
 
@@ -212,6 +227,11 @@ class Network_Summary
 		wp_editor( $option, Network_Summary::SITE_SETTING_NAME . '[site_description]', $editor_settings );
 	}
 
+	/**
+	 * Validation of the site settings input.
+	 * @param $input POST parameters from the reading settings section.
+	 * @return mixed|void if permissions are okay it returns the updated settings. Otherwise it exists WordPress.
+	 */
 	public function validate_update_site_settings( $input ) {
 		$output = get_option( Network_Summary::SITE_SETTING_NAME );
 		if ( $input != null ) {
@@ -250,6 +270,7 @@ class Network_Summary
 	 * parameter can be either 'abc' or 'posts'. 'abc' is the default value and sorts the posts alphabetically. 'posts'
 	 * sorts the sites so that the one with the most recents posts are listed first. Finally it takes a layout parameter
 	 * which takes either 'grid' (default) or 'table' and displays the sites accordingly.
+	 * @return string the html content for the overview view.
 	 */
 	public function netview_overview( $atts ) {
 		$params = shortcode_atts( array(
@@ -262,7 +283,7 @@ class Network_Summary
 
 		$param_hash = md5( serialize( $params ) );
 
-		wp_register_style( 'network_summary', plugins_url( 'network-summary.css', __FILE__ ) );
+		wp_register_style( 'network_summary', plugins_url( '/css/network-summary.css', __FILE__ ) );
 		wp_enqueue_style( 'network_summary' );
 
 		if ( false === ($result = get_transient( 'netview_overview_' . $param_hash )) ) {
@@ -338,6 +359,7 @@ class Network_Summary
 	 *
 	 * @param $atts array with a required id of the site to display and a url to a image for the site. Also accepts a
 	 * numposts parameter for the number of recent posts displayed. Can be 0 and defaults to 2.
+	 * @return string html content for single view.
 	 */
 	public function netview_single( $atts ) {
 		$params = shortcode_atts( array(
@@ -348,7 +370,7 @@ class Network_Summary
 
 		$param_hash = md5( serialize( $params ) );
 
-		wp_register_style( 'network_summary', plugins_url( 'network-summary.css', __FILE__ ) );
+		wp_register_style( 'network_summary', plugins_url( '/css/network-summary.css', __FILE__ ) );
 		wp_enqueue_style( 'network_summary' );
 
 		if ( false === ($result = get_transient( 'netview_single_' . $param_hash )) ) {
@@ -387,13 +409,14 @@ class Network_Summary
 	 * Displays a index of all available sites in an alphabetic order.
 	 *
 	 * @param $atts array with a title attribute displayed before the list.
+	 * @return string html content
 	 */
 	public function netview_all( $atts ) {
 		$params = shortcode_atts( array(
 			'title' => "All Sites"
 		), $atts, 'netview-all' );
 
-		wp_register_style( 'network_summary', plugins_url( 'network-summary.css', __FILE__ ) );
+		wp_register_style( 'network_summary', plugins_url( '/css/network-summary.css', __FILE__ ) );
 		wp_enqueue_style( 'network_summary' );
 
 		$title = '<div class="netview-all"><h2>' . $params['title'] . '</h2>';
