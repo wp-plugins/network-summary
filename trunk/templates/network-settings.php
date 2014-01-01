@@ -16,7 +16,6 @@ if ( isset($_GET['updated']) ) {
 ?>
 
 <div class="wrap">
-	<?php screen_icon( 'options-general' ); ?>
 	<h2><?php echo esc_html( $title ); ?></h2>
 
 	<p>The following setting allow you to define whether each site administrator is able to decide on their own, whether
@@ -28,8 +27,9 @@ if ( isset($_GET['updated']) ) {
 		<?php wp_nonce_field( 'network_summary_settings' ); ?>
 		<table class="form-table">
 			<tbody>
-			<tr valign="top">
-				<th scope="row"><label for="<?php echo Network_Summary::NETWORK_SETTING_NAME ?>[deciding_role]">Deciding
+			<tr>
+				<th class="label-row-deciding-role"><label
+						for="<?php echo Network_Summary::NETWORK_SETTING_NAME ?>[deciding_role]">Deciding
 						Role on Sharing Content</label></th>
 				<td>
 					<select name="<?php echo Network_Summary::NETWORK_SETTING_NAME ?>[deciding_role]" required>
@@ -47,13 +47,13 @@ if ( isset($_GET['updated']) ) {
 		<h3><?php echo __( 'Site Sharing Settings' ) ?></h3>
 		<table class="form-table network-summary">
 			<thead>
-			<tr valign="top">
+			<tr>
 				<th>Site</th>
-				<th style="width: 8%">Content is visible</th>
-				<th style="width: 8%">Content is not visible</th>
+				<th style="width: 10%">Content is visible</th>
+				<th style="width: 10%">Content is not visible</th>
 				<th>Description</th>
-				<th style="width: 4%"># Posts</th>
-				<th style="width: 4%"># Pages</th>
+				<th style="width: 5%"># Posts</th>
+				<th style="width: 5%"># Pages</th>
 				<th>Last Post</th>
 			</tr>
 			</thead>
@@ -71,7 +71,7 @@ if ( isset($_GET['updated']) ) {
 				), 'OBJECT' );
 				$post = $post[0];
 				?>
-				<tr valign="top">
+				<tr>
 					<td><a
 							href="<?php echo get_admin_url( $site_id, 'options-reading.php' ) ?>"><?php echo $site ?></a>
 					</td>
