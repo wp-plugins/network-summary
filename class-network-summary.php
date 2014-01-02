@@ -569,7 +569,7 @@ class Network_Summary
 	}
 
 	private function get_rss2_url( array $sites ) {
-		return get_feed_link( 'rss2-network' ) . '?' . http_build_query( array('sites' => $sites) );
+		return get_bloginfo('url') . '?' . http_build_query( array('feed' => 'rss2-network', 'sites' => $sites) );
 	}
 
 	public static function get_plugin_option( $tag, $blog_id = null, $network = false ) {
