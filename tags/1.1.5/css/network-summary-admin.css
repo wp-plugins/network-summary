@@ -1,0 +1,20 @@
+.network-summary th {
+    font-weight: bold;
+}
+
+.network-summary tr {
+    border-bottom: 1px solid #d3d3d3;
+}
+
+.network-summary tbody tr:nth-child(odd) {
+    background-color: aliceblue;
+}
+
+.form-table th, .form-table td {
+    padding: 10px 5px;
+}
+
+th.label-row-deciding-role {
+    width: 250px;
+    vertical-align: middle;
+}
