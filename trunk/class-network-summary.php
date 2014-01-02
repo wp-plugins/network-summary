@@ -4,26 +4,28 @@ class Network_Summary
 {
 	const SITE_SETTING_NAME = 'network_summary';
 	const NETWORK_SETTING_NAME = 'network_summary';
-	const CURRENT_VERSION = '1.1.4';
+	const CURRENT_VERSION = '1.1.5';
 
 	/**
 	 * Construct the plugin object by registering actions and shortcodes.
 	 */
 	public function __construct() {
-		add_action( 'admin_init', array(&$this, 'admin_init') );
-		add_action( 'admin_init', array(&$this, 'maybe_update') );
-		add_action( 'network_admin_menu', array(&$this, 'add_network_admin_page') );
+		add_action( 'admin_init', array($this, 'admin_init') );
+		add_action( 'admin_init', array($this, 'maybe_update') );
+		add_action( 'network_admin_menu', array($this, 'add_network_admin_page') );
 
-		add_shortcode( 'netview', array(&$this, 'netview_overview') );
-		add_shortcode( 'netview-single', array(&$this, 'netview_single') );
-		add_shortcode( 'netview-all', array(&$this, 'netview_all') );
+		add_shortcode( 'netview', array($this, 'netview_overview') );
+		add_shortcode( 'netview-single', array($this, 'netview_single') );
+		add_shortcode( 'netview-all', array($this, 'netview_all') );
 
-		add_action( 'wpmu_new_blog', array(&$this, 'add_new_site') );
+		add_action( 'wpmu_new_blog', array($this, 'add_new_site') );
 
 		add_action( 'admin_post_update_network_summary_network_settings',
-			array(&$this, 'update_network_settings') );
+			array($this, 'update_network_settings') );
 
-		add_action( 'widgets_init', array(&$this, 'register_widgets') );
+		add_action( 'widgets_init', array($this, 'register_widgets') );
+
+		add_action( 'init', array($this, 'init') );
 	}
 
 	/**
@@ -83,6 +85,13 @@ class Network_Summary
 	}
 
 	/**
+	 * Hook into WP's init action hook.
+	 */
+	public function init() {
+		add_feed( 'rss2-network', array($this, 'get_rss2_feed') );
+	}
+
+	/**
 	 * Hook into WP's admin_init action hook.
 	 */
 	public function admin_init() {
@@ -94,7 +103,7 @@ class Network_Summary
 	 */
 	public function add_network_admin_page() {
 		add_submenu_page( 'settings.php', 'Network Summary Settings', 'Network Summary', 'manage_network',
-			'network-summary-settings', array(&$this, 'network_settings_page') );
+			'network-summary-settings', array($this, 'network_settings_page') );
 	}
 
 	/**
@@ -155,10 +164,10 @@ class Network_Summary
 		define('PAGE', 'reading');
 		define('SECTION', 'share_site_settings');
 
-		add_settings_section( SECTION, 'Network Summary', array(&$this, 'render_sharing_settings_section'), PAGE );
-		add_settings_field( 'share_site', 'Show your content', array(&$this, 'render_share_site_setting'), PAGE, SECTION );
-		add_settings_field( 'site_description', 'Site Description', array(&$this, 'render_description_setting'), PAGE, SECTION );
-		register_setting( PAGE, Network_Summary::SITE_SETTING_NAME, array(&$this, 'validate_update_site_settings') );
+		add_settings_section( SECTION, 'Network Summary', array($this, 'render_sharing_settings_section'), PAGE );
+		add_settings_field( 'share_site', 'Show your content', array($this, 'render_share_site_setting'), PAGE, SECTION );
+		add_settings_field( 'site_description', 'Site Description', array($this, 'render_description_setting'), PAGE, SECTION );
+		register_setting( PAGE, Network_Summary::SITE_SETTING_NAME, array($this, 'validate_update_site_settings') );
 
 		register_setting( 'network_summary_settings', Network_Summary::NETWORK_SETTING_NAME );
 	}
@@ -323,9 +332,18 @@ class Network_Summary
 				$params['images'] = $params['images'] === 'true';
 			}
 
+			if ( strcmp( $params['rss'], 'true' ) !== 0 && strcmp( $params['rss'], 'false' ) !== 0 ) {
+				return '<p><b>Illegal parameter <code>rss</code> (must be <code>true</code> or <code>false</code>).</b></p>';
+			} else {
+				$params['rss'] = $params['rss'] === 'true';
+			}
+
 			$dateFormat = get_option( 'date_format' );
 
 			$result = '<div class="netview">';
+			if ( $params['rss'] ) {
+				$result .= '<a class="network-feed" href="' . $this->get_rss2_url( $sites ) . '">RSS Feed</a>';
+			}
 			$i = 0;
 			if ( 0 === strcmp( $params['layout'], 'table' ) ) {
 				$result .= '<table class="netview-site"><tbody>';
@@ -462,6 +480,13 @@ class Network_Summary
 		return $title . $result;
 	}
 
+	public function get_rss2_feed( $comment ) {
+		$rss_template = plugin_dir_path( __FILE__ ) . '/templates/feed-rss2-network.php';
+		if ( file_exists( $rss_template ) ) {
+			load_template( $rss_template );
+		}
+	}
+
 	/**
 	 * Build a list of all sites in a network.
 	 */
@@ -541,6 +566,10 @@ class Network_Summary
 			} );
 		}
 
+	}
+
+	private function get_rss2_url( array $sites ) {
+		return get_feed_link( 'rss2-network' ) . '?' . http_build_query( array('sites' => $sites) );
 	}
 
 	public static function get_plugin_option( $tag, $blog_id = null, $network = false ) {
