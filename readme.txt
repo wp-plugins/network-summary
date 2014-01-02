@@ -33,6 +33,7 @@ Options:
 * `sort` (optional, default: 'abc') expects either 'abc' or 'posts'. 'abc' means alphabetical sorting. 'posts' will sort the sites according to their most recent post.
 * `layout` (optional, default: 'table') expects either 'grid' or 'table'. Defines the layout of the list. Grid uses two columns. Table uses one row per site.
 * `images` (optional, default: 'true') expects either 'true' or 'false'. Defines whether header images of the sites are displayed if available.
+* `rss` (optional, default: 'true') expects either 'true' or 'false'. Defines whether a custom rss feed link should be displayed.
 
 Example:
 
@@ -63,6 +64,9 @@ Description: Displays all visible sites in form of an index in alphabetical orde
 2. The settings page in the network admin area.
 
 == Changelog ==
+
+= 1.1.5 =
+* Added rss functionality.
 
 = 1.1.4 =
 * Added the display of header pictures.

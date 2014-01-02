@@ -91,3 +91,9 @@ h2 a {
     float: left;
     width: 30%;
 }
+
+.network-feed {
+    margin-left: 3px;
+    padding: 0 0 0 19px;
+    background: url("../images/feed-icon-14x14.png") no-repeat 0 50%;
+}
