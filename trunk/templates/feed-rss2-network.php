@@ -4,10 +4,12 @@
  *
  */
 
+global $network_summary;
+
 if ( isset($_GET['sites']) ) {
 	$sites = $_GET['sites'];
 } else {
-	wp_die( 'The sites for this rss feed must be specified.' );
+	$sites = $network_summary->get_sites();
 }
 
 header( 'Content-Type: ' . feed_content_type( 'rss-http' ) . '; charset=' . get_option( 'blog_charset' ), true );
@@ -41,7 +43,7 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 	<channel>
 		<title><?php siteinfo_rss( 'site_name' ); ?></title>
 		<atom:link href="<?php self_link(); ?>" rel="self" type="application/rss+xml"/>
-		<link><?php siteinfo_rss( 'siteurl' ) ?></link>
+		<link><?php siteinfo_rss( 'siteurl' ); ?></link>
 		<lastBuildDate><?php echo mysql2date( 'D, d M Y H:i:s +0000', get_lastpostmodified( 'GMT' ), false ); ?></lastBuildDate>
 		<language><?php siteinfo_rss( 'WPLANG' ); ?></language>
 		<?php
@@ -81,16 +83,15 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 		 */
 		$posts = array();
 		foreach ( $sites as $site_id ) {
-			switch_to_blog( $site_id );
-			$option = get_option( Network_Summary::SITE_SETTING_NAME );
-			if ( isset($option['share_site']) && $option['share_site'] ) {
+			if ( $network_summary->get_option( 'share_site', false, $site_id ) ) {
+				switch_to_blog( $site_id );
 				$query = new WP_Query();
 				$tmp_posts = $query->get_posts();
 				foreach ( $tmp_posts as $post ) {
 					array_push( $posts, $post );
 				}
+				restore_current_blog();
 			}
-			restore_current_blog();
 		}
 
 		/*

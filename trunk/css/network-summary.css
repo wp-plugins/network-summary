@@ -83,17 +83,8 @@ h2 a {
     display: inline-block;
 }
 
-.netview-all ul {
-    width: 100%;
-}
-
-.netview-all ul li {
-    float: left;
-    width: 30%;
-}
-
 .network-feed {
     margin-left: 3px;
     padding: 0 0 0 19px;
-    background: url("../images/feed-icon-14x14.png") no-repeat 0 50%;
+    background: url("../img/feed-icon-14x14.png") no-repeat 0 50%;
 }
