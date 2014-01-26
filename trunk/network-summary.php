@@ -3,7 +3,7 @@
 Plugin Name: Network Summary
 Plugin URI: http://www.aleaiactaest.ch/network-summary
 Description: Allows the display of content from other sites within the same network.
-Version: 1.1.5
+Version: 2.0.0
 Network: True
 Author: Joel Krebs
 Author URI: http://www.aleaiactaest.ch
