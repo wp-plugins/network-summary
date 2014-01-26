@@ -2,17 +2,18 @@
 Contributors: jokr
 Tags: description, multisite, overview
 Requires at least: 3.5.2
-Tested up to: 3.8.0
-Stable tag: 1.1.5
+Tested up to: 3.8.1
+Stable tag: 2.0.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugins enables sites of a network to display information and posts from other sites within the same network.
+This plugin enables sites of a network to display information and posts from other sites within the same network.
 
 == Description ==
 
 With this plugin each site of a network can decide whether its content can be displayed by other sites within the network.
-For this purpose the plugin offers different shortcodes as well as some widgets and menu elements in the future.
+The plugin offers three different shortcodes to display such content. To make the grouping of sites easier, each site can have one
+or multiple categories.
 
 In order to have consistent information about each site, it also adds a new field *Description* to each site which should
 provide a summary of the site's content.
@@ -29,6 +30,7 @@ Options:
 
 * `include` (optional, defaults: all available) expects a comma separated list of site ids. It will only will list these sites.
 * `exclude` (optional) expects a comma separated list of site ids. It will list all sites except the listed ones.
+* `category` (optional) expects a comma seperated list of category ids. Only sites within these categories will be displayed, regardless of the include parameter. The exclude parameter will still apply.
 * `numposts` (optional, default: 2) expects a number. Limits the number of most recent published posts displayed.
 * `sort` (optional, default: 'abc') expects either 'abc' or 'posts'. 'abc' means alphabetical sorting. 'posts' will sort the sites according to their most recent post.
 * `layout` (optional, default: 'table') expects either 'grid' or 'table'. Defines the layout of the list. Grid uses two columns. Table uses one row per site.
@@ -61,9 +63,14 @@ Description: Displays all visible sites in form of an index in alphabetical orde
 == Screenshots ==
 
 1. The settings section for each individual site if the site admins are allowed to decide for themselves whether they want to share their content or not.
-2. The settings page in the network admin area.
+2. The settings page in the network admin area. Here every site can either be set to visible or hidden. The network admin can also decide, whether the site admins can make this choice on their own or not.
+3. Here the site categories can be managed.
 
 == Changelog ==
+
+= 2.0.0 =
+* Massive refactoring of existing code.
+* Adding the category setting for each blog and the network.
 
 = 1.1.5 =
 * Added rss functionality.
