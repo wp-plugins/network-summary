@@ -19,7 +19,7 @@ class Network_Summary
 		define('NETWORK_SUMMARY_DIR', plugin_dir_path( __DIR__ ));
 		define('NETWORK_SUMMARY_URL', plugin_dir_url( __DIR__ ));
 		define('NETWORK_SUMMARY_OPTIONS', 'network_summary');
-		define('NETWORK_SUMMARY_VERSION', '2.0');
+		define('NETWORK_SUMMARY_VERSION', '2.0.1');
 
 		add_action( 'admin_init', array($this, 'maybe_update') );
 
@@ -51,17 +51,6 @@ class Network_Summary
 		add_site_option( 'network_summary_version', NETWORK_SUMMARY_VERSION );
 
 		$this->site_categories->create_table();
-	}
-
-	/**
-	 * Tear down on deactivation. Deletes all the settings.
-	 */
-	public function deactivate() {
-		foreach ( $this->get_sites() as $site_id ) {
-			delete_blog_option( $site_id, NETWORK_SUMMARY_OPTIONS );
-		}
-		delete_site_option( NETWORK_SUMMARY_OPTIONS );
-		delete_site_option( 'network_summary_version' );
 	}
 
 	/**
