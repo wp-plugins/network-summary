@@ -370,9 +370,13 @@ class Network_Summary_Admin
 				selected( $selected, true, false ),
 				$category->name );
 		}
-		return sprintf( '<select name="%s[]" class="category-select" multiple>%s</select>',
-			$name,
-			implode( $categories ) );
+        if( empty( $categories ) ) {
+            return __('No categories defined.', 'network-summary');
+        } else {
+            return sprintf( '<select name="%s[]" class="category-select" multiple>%s</select>',
+                $name,
+                implode( $categories ) );
+        }
 	}
 }
  
