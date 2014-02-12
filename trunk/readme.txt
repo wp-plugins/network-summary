@@ -3,7 +3,7 @@ Contributors: jokr
 Tags: description, multisite, overview
 Requires at least: 3.5.2
 Tested up to: 3.8.1
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,9 @@ Description: Displays all visible sites in form of an index in alphabetical orde
 3. Here the site categories can be managed.
 
 == Changelog ==
+
+= 2.0.2 =
+* Fixed a bug with the rss feed.
 
 = 2.0.1 =
 * Properly added uninstall.php and data is now preserved over deactivation.
