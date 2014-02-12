@@ -16,11 +16,6 @@ class Network_Summary
 	 * Construct the plugin object and registers actions and shortcodes.
 	 */
 	public function __construct() {
-		define('NETWORK_SUMMARY_DIR', plugin_dir_path( __DIR__ ));
-		define('NETWORK_SUMMARY_URL', plugin_dir_url( __DIR__ ));
-		define('NETWORK_SUMMARY_OPTIONS', 'network_summary');
-		define('NETWORK_SUMMARY_VERSION', '2.0.1');
-
 		add_action( 'admin_init', array($this, 'maybe_update') );
 
 		add_shortcode( 'netview', array('Network_Overview_Shortcode', 'render') );
@@ -111,7 +106,7 @@ class Network_Summary
 
 
 	public function get_rss2_feed() {
-		$rss_template = plugin_dir_path( __FILE__ ) . '/templates/feed-rss2-network.php';
+		$rss_template = NETWORK_SUMMARY_DIR . 'templates/feed-rss2-network.php';
 		if ( file_exists( $rss_template ) ) {
 			load_template( $rss_template );
 		}
