@@ -3,7 +3,7 @@ Contributors: jokr
 Tags: description, multisite, overview
 Requires at least: 3.5.2
 Tested up to: 3.8.1
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,12 @@ Description: Displays all visible sites in form of an index in alphabetical orde
 3. Here the site categories can be managed.
 
 == Changelog ==
+
+= 2.0.3 =
+* Updated the rss feed. It is no valid rss feed. The language is always en-US and the author is the page of the post.
+* RSS feed accepts category arguments, e.g. `/feed/rss2-network?category=1` will display all items of this category.
+* The RSS feed now has a default limit of 50 items. The value can be changed in the network settings.
+* Refactoring of the settings and options.
 
 = 2.0.2 =
 * Fixed a bug with the rss feed.

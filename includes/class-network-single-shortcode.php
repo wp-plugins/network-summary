@@ -13,7 +13,7 @@ class Network_Single_Shortcode extends Network_Summary_Shortcode
 	 */
 	public static function render( $atts ) {
 		global $network_summary;
-		$code = new Network_Single_Shortcode($network_summary, $atts, false);
+		$code = new Network_Single_Shortcode( $network_summary, $atts, false );
 		return $code->output();
 	}
 
@@ -30,10 +30,10 @@ class Network_Single_Shortcode extends Network_Summary_Shortcode
 			site_url(), get_bloginfo()
 		);
 
-		if ( ! empty($this->args['img']) ) {
+		if ( ! empty( $this->args['img'] ) ) {
 			$result .= sprintf( '<a href="%s"><img class="featured-img" src="%s"></a>', site_url(), $this->args['img'] );
 		}
-		$result .= wpautop( do_shortcode( $this->plugin->get_option( 'site_description' ) ) );
+		$result .= wpautop( do_shortcode( site_description() ) );
 		if ( $this->args['numposts'] > 0 ) {
 			$result .= '<h4>Recent Posts</h4>';
 			$result .= $this->get_recent_posts( $this->args['numposts'], $dateFormat );
