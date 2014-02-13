@@ -13,7 +13,7 @@ License: GPL2
 define('NETWORK_SUMMARY_DIR', plugin_dir_path( __FILE__ ));
 define('NETWORK_SUMMARY_URL', plugin_dir_url( __FILE__ ));
 define('NETWORK_SUMMARY_OPTIONS', 'network_summary');
-define('NETWORK_SUMMARY_VERSION', '2.0.2');
+define('NETWORK_SUMMARY_VERSION', '2.0.3');
 
 include_once dirname(__FILE__) . '/includes/class-network-summary.php';
 
