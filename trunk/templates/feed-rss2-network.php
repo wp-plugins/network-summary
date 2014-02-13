@@ -6,8 +6,17 @@
 
 global $network_summary;
 
-if ( isset($_GET['sites']) ) {
+if ( isset( $_GET['sites'] ) ) {
 	$sites = $_GET['sites'];
+} elseif ( isset( $_GET['category'] ) ) {
+	if ( is_array( $_GET['category'] ) ) {
+		$sites = array();
+		foreach ( $_GET['category'] as $category ) {
+			$sites = array_merge( $sites, $network_summary->get_sites_per_category( $category ) );
+		}
+	} else {
+		$sites = $network_summary->get_sites_per_category( $_GET['category'] );
+	}
 } else {
 	$sites = $network_summary->get_sites();
 }
@@ -45,7 +54,7 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 		<atom:link href="<?php self_link(); ?>" rel="self" type="application/rss+xml"/>
 		<link><?php siteinfo_rss( 'siteurl' ); ?></link>
 		<lastBuildDate><?php echo mysql2date( 'D, d M Y H:i:s +0000', get_lastpostmodified( 'GMT' ), false ); ?></lastBuildDate>
-		<language><?php siteinfo_rss( 'WPLANG' ); ?></language>
+		<language>en-US</language>
 		<?php
 		$duration = 'hourly';
 		/**
@@ -70,6 +79,7 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 		 */
 		?>
 		<sy:updateFrequency><?php echo apply_filters( 'rss_update_frequency', $frequency ); ?></sy:updateFrequency>
+		<description><?php _e( sprintf( 'Aggregated RSS Feed for %s.', get_site_option( 'site_name' ) ), 'network-summary' ); ?></description>
 		<?php
 		/**
 		 * Fires at the end of the RSS2 Feed Header.
@@ -83,11 +93,11 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 		 */
 		$posts = array();
 		foreach ( $sites as $site_id ) {
-			if ( $network_summary->get_option( 'share_site', false, $site_id ) ) {
+			if ( share_site( $site_id ) ) {
 				switch_to_blog( $site_id );
 				$query = new WP_Query();
-				$tmp_posts = $query->get_posts();
-				foreach ( $tmp_posts as $post ) {
+				foreach ( $query->get_posts() as $post ) {
+					$post->site_title = get_bloginfo( 'name' );
 					array_push( $posts, $post );
 				}
 				restore_current_blog();
@@ -103,6 +113,10 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 
 		usort( $posts, 'sort_by_post_date' );
 
+		$limit = get_site_option( Network_Summary::network_option );
+		$limit = $limit['rss_limit'];
+		$posts = array_slice( $posts, 0, $limit );
+
 		/*
 		 * Outputs all the posts.
 		 */
@@ -113,7 +127,7 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 				<link><?php the_permalink_rss() ?></link>
 				<comments><?php comments_link_feed(); ?></comments>
 				<pubDate><?php echo mysql2date( 'D, d M Y H:i:s +0000', get_post_time( 'Y-m-d H:i:s', true ), false ); ?></pubDate>
-				<dc:creator><![CDATA[<?php the_author() ?>]]></dc:creator>
+				<dc:creator><![CDATA[<?php echo $post->site_title ?>]]></dc:creator>
 				<?php the_category_rss( 'rss2' ) ?>
 
 				<guid isPermaLink="false"><?php the_guid(); ?></guid>
@@ -128,7 +142,7 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 						<content:encoded><![CDATA[<?php the_excerpt_rss(); ?>]]></content:encoded>
 					<?php endif; ?>
 				<?php endif; ?>
-				<wfw:commentRss><?php echo esc_url( get_post_comments_feed_link( null, 'rss2' ) ); ?></wfw:commentRss>
+				<wfw:commentRss><?php echo esc_url( untrailingslashit( get_permalink() ) . get_post_comments_feed_link( null, 'rss2' ) ); ?></wfw:commentRss>
 				<slash:comments><?php echo get_comments_number(); ?></slash:comments>
 				<?php rss_enclosure(); ?>
 				<?php

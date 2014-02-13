@@ -21,7 +21,7 @@ abstract class Network_Summary_List_Table
 	protected abstract function get_all_columns();
 
 	protected function get_hidden_columns() {
-		return array('id');
+		return array();
 	}
 
 	protected function get_column_widths() {

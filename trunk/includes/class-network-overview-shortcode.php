@@ -19,7 +19,7 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 	 */
 	public static function render( $atts ) {
 		global $network_summary;
-		$code = new Network_Overview_Shortcode($network_summary, $atts, false);
+		$code = new Network_Overview_Shortcode( $network_summary, $atts, false );
 		return $code->output();
 	}
 
@@ -97,14 +97,14 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 			);
 		}
 
-		if ( ! in_array( $this->args['sort'] = strtolower( $this->args['sort'] ), array('abc', 'posts') ) ) {
+		if ( ! in_array( $this->args['sort'] = strtolower( $this->args['sort'] ), array( 'abc', 'posts' ) ) ) {
 			array_push(
 				$this->errors,
 				'Illegal parameter <code>sort</code> (must be <code>abc</code> or <code>posts</code>).'
 			);
 		}
 
-		if ( ! in_array( $this->args['layout'] = strtolower( $this->args['layout'] ), array('grid', 'table') ) ) {
+		if ( ! in_array( $this->args['layout'] = strtolower( $this->args['layout'] ), array( 'grid', 'table' ) ) ) {
 			array_push(
 				$this->errors,
 				'Illegal parameter <code>layout</code> (must be <code>grid</code> or <code>table</code>).'
@@ -115,10 +115,10 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 		$this->args['images'] = $this->extract_boolVal( $this->args['images'] );
 		$this->args['rss'] = $this->extract_boolVal( $this->args['rss'] );
 
-		if ( ! empty($this->args['category']) ) {
+		if ( ! empty( $this->args['category'] ) ) {
 			$sites_per_category = array();
 			foreach ( $this->args['category'] as $cat ) {
-				$sites_per_category = array_merge($sites_per_category, $this->plugin->get_sites_per_category($cat));
+				$sites_per_category = array_merge( $sites_per_category, $this->plugin->get_sites_per_category( $cat ) );
 			}
 
 			$this->args['include'] = array_intersect(
@@ -134,7 +134,7 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 	}
 
 	protected function generate_output() {
-		if ( empty($this->sites) ) {
+		if ( empty( $this->sites ) ) {
 			return '<p><b>No sites to display.</b></p>';
 		}
 
@@ -142,7 +142,7 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 		$result = '<div class="netview">';
 
 		extract( $this->args );
-		if ( isset($layout) && isset($numposts) && isset($images) && isset($rss) ) {
+		if ( isset( $layout ) && isset( $numposts ) && isset( $images ) && isset( $rss ) ) {
 
 			if ( $rss ) {
 				$result .= '<div><a class="network-feed" href="' . $network_summary->get_rss2_url( $this->sites ) . '">RSS Feed</a></div>';
@@ -154,7 +154,7 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 			foreach ( $this->sites as $site_id ) {
 				switch_to_blog( $site_id );
 				$name = '<h2 class="site-title"><a href="' . site_url() . '">' . get_bloginfo() . '</a></h2>';
-				$description = wpautop( do_shortcode( $network_summary->get_option( 'site_description' ) ) );
+				$description = wpautop( do_shortcode( site_description() ) );
 				if ( $images && get_header_image() ) {
 					$picture = '<a href="' . site_url() . '"><img src="' . get_header_image() . '"></a>';
 				} else {
@@ -167,7 +167,7 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 				}
 
 				if ( 'grid' == $layout ) {
-					$result .= '<div class="netview-site ' . (($i ++ % 2 == 0) ? 'even' : 'odd') . '">';
+					$result .= '<div class="netview-site ' . ( ( $i ++ % 2 == 0 ) ? 'even' : 'odd' ) . '">';
 					$result .= $name;
 					if ( $images && get_header_image() ) {
 						$result .= '<span class="header-image">' . $picture . '</span>';
@@ -198,7 +198,7 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 	private function sort_sites() {
 		$sorting = $this->args['sort'];
 		if ( 'abc' == $sorting ) {
-			@usort( $this->sites, array($this, 'sort_sites_by_name') );
+			@usort( $this->sites, array( $this, 'sort_sites_by_name' ) );
 		} else if ( 'posts' == $sorting ) {
 			@usort( $this->sites, 'sort_sites_by_recent_post' );
 		}
@@ -213,9 +213,9 @@ function sort_sites_by_recent_post( $site_a, $site_b ) {
 
 function get_most_recent_post( $blog_id ) {
 	switch_to_blog( $blog_id );
-	$recent = wp_get_recent_posts( array('numberposts' => 1, 'post_status' => 'publish') );
+	$recent = wp_get_recent_posts( array( 'numberposts' => 1, 'post_status' => 'publish' ) );
 	$result = null;
-	if ( ! empty($recent) ) {
+	if ( ! empty( $recent ) ) {
 		$result = $recent[0];
 	}
 	restore_current_blog();
