@@ -13,6 +13,9 @@ class Site_Category_Repository
 	public function create_table() {
 		global $wpdb;
 
+        $engine = $wpdb->get_row("SELECT ENGINE FROM information_schema.TABLES where TABLE_NAME = '$wpdb->blogs'", ARRAY_A);
+        $engine = $engine['ENGINE'];
+
 		$sql = "CREATE TABLE $wpdb->site_categories (
 			id BIGINT NOT NULL AUTO_INCREMENT,
 			created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -20,6 +23,7 @@ class Site_Category_Repository
 			description VARCHAR(255) DEFAULT NULL,
 			PRIMARY KEY id (id)
 		)
+		ENGINE $engine,
 		DEFAULT COLLATE utf8_general_ci;";
 
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -36,6 +40,7 @@ class Site_Category_Repository
 			FOREIGN KEY (category_id)
 				REFERENCES $wpdb->site_categories(id)
 		)
+		ENGINE $engine,
 		DEFAULT COLLATE utf8_general_ci;";
 
 		dbdelta( $sql );

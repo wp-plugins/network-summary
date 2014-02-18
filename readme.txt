@@ -3,7 +3,7 @@ Contributors: jokr
 Tags: description, multisite, overview
 Requires at least: 3.5.2
 Tested up to: 3.8.1
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,11 @@ Description: Displays all visible sites in form of an index in alphabetical orde
 3. Here the site categories can be managed.
 
 == Changelog ==
+
+= 2.0.4 =
+* Simplified RSS feed urls.
+* Rewrite rules are now flushed with activation.
+* Scripts to create databases now check for the correct mysql storage engine.
 
 = 2.0.3 =
 * Updated the rss feed. It is no valid rss feed. The language is always en-US and the author is the page of the post.
