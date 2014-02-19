@@ -54,9 +54,8 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 		<atom:link href="<?php self_link(); ?>" rel="self" type="application/rss+xml"/>
 		<link><?php siteinfo_rss( 'siteurl' ); ?></link>
 		<lastBuildDate><?php echo mysql2date( 'D, d M Y H:i:s +0000', get_lastpostmodified( 'GMT' ), false ); ?></lastBuildDate>
-		<language>en-US</language>
+		<language><?php bloginfo_rss( 'language' ); ?></language>
 		<?php
-		$duration = 'hourly';
 		/**
 		 * Filter how often to update the RSS feed.
 		 *
@@ -66,9 +65,8 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 		 *                         Default 'hourly'. Accepts 'hourly', 'daily', 'weekly', 'monthly', 'yearly'.
 		 */
 		?>
-		<sy:updatePeriod><?php echo apply_filters( 'rss_update_period', $duration ); ?></sy:updatePeriod>
+		<sy:updatePeriod><?php echo apply_filters( 'rss_update_period', 'hourly' ); ?></sy:updatePeriod>
 		<?php
-		$frequency = '1';
 		/**
 		 * Filter the RSS update frequency.
 		 *
@@ -78,7 +76,7 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 		 *                          of RSS updates within the update period. Default '1'.
 		 */
 		?>
-		<sy:updateFrequency><?php echo apply_filters( 'rss_update_frequency', $frequency ); ?></sy:updateFrequency>
+		<sy:updateFrequency><?php echo apply_filters( 'rss_update_frequency', '1' ); ?></sy:updateFrequency>
 		<description><?php _e( sprintf( 'Aggregated RSS Feed for %s.', get_site_option( 'site_name' ) ), 'network-summary' ); ?></description>
 		<?php
 		/**
@@ -97,7 +95,7 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 				switch_to_blog( $site_id );
 				$query = new WP_Query();
 				foreach ( $query->get_posts() as $post ) {
-					$post->site_title = get_bloginfo( 'name' );
+					$post->site_id = $site_id;
 					array_push( $posts, $post );
 				}
 				restore_current_blog();
@@ -121,13 +119,14 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 		 * Outputs all the posts.
 		 */
 		foreach ( $posts as $post ) :
+			switch_to_blog( $post->site_id );
 			?>
 			<item>
 				<title><?php the_title_rss() ?></title>
 				<link><?php the_permalink_rss() ?></link>
 				<comments><?php comments_link_feed(); ?></comments>
 				<pubDate><?php echo mysql2date( 'D, d M Y H:i:s +0000', get_post_time( 'Y-m-d H:i:s', true ), false ); ?></pubDate>
-				<dc:creator><![CDATA[<?php echo $post->site_title ?>]]></dc:creator>
+				<dc:creator><![CDATA[<?php bloginfo( 'name' ); ?>]]></dc:creator>
 				<?php the_category_rss( 'rss2' ) ?>
 
 				<guid isPermaLink="false"><?php the_guid(); ?></guid>
@@ -154,7 +153,8 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 				do_action( 'rss2_item' );
 				?>
 			</item>
-		<?php
+			<?php
+			restore_current_blog();
 		endforeach;
 
 		?>
