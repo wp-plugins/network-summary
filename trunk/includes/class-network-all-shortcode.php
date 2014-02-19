@@ -13,7 +13,7 @@ class Network_All_Shortcode extends Network_Summary_Shortcode
 	 */
 	public static function render( $atts ) {
 		global $network_summary;
-		$code = new Network_All_Shortcode($network_summary, $atts, false);
+		$code = new Network_All_Shortcode( $network_summary, $atts, false );
 		return $code->output();
 	}
 
@@ -26,11 +26,11 @@ class Network_All_Shortcode extends Network_Summary_Shortcode
 
 		$sites = $this->plugin->get_shared_sites();
 
-		if ( empty($sites) ) {
+		if ( empty( $sites ) ) {
 			return '<p><b>No sites to display.</b></p>';
 		}
 
-		usort( $sites, array($this, 'sort_sites_by_name') );
+		usort( $sites, array( $this, 'sort_sites_by_name' ) );
 
 		$result = '<ul>';
 		foreach ( $sites as $site_id ) {

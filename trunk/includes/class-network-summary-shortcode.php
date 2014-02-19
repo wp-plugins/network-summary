@@ -29,7 +29,7 @@ abstract class Network_Summary_Shortcode
 
 	public function output() {
 		$this->enqueue_styles();
-		if ( empty($this->errors) ) {
+		if ( empty( $this->errors ) ) {
 			if ( ! $this->cached ) {
 				$this->output = $this->generate_output();
 			}
@@ -84,7 +84,7 @@ abstract class Network_Summary_Shortcode
 	protected function get_recent_posts( $number_of_posts, $dateFormat ) {
 		$result = '<ul class="site-recent-post">';
 
-		$recent_posts = wp_get_recent_posts( array('numberposts' => $number_of_posts, 'post_status' => 'publish') );
+		$recent_posts = wp_get_recent_posts( array( 'numberposts' => $number_of_posts, 'post_status' => 'publish' ) );
 		foreach ( $recent_posts as $post ) {
 			$result .= '<li><a href="' . get_permalink( $post["ID"] ) . '" title="Read ' . $post["post_title"] . '.">'
 				. $post["post_title"] . '</a><span class="netview-date">'

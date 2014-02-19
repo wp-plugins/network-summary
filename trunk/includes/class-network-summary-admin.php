@@ -242,15 +242,15 @@ class Network_Summary_Admin
 			?>
 			<label for="share_site_include">
 				<input id="share_site_include" type="radio"
-				       name="<?php echo Network_Summary::site_option ?>[share_site]"
-				       value="1" <?php checked( $option, '1' ) ?>
+					   name="<?php echo Network_Summary::site_option ?>[share_site]"
+					   value="1" <?php checked( $option, '1' ) ?>
 				"> <?php _e( 'Yes, show it!', 'network-summary' ); ?>
 			</label>
 			<br>
 			<label for="share_site_exclude">
 				<input id="share_site_exclude" type="radio"
-				       name="<?php echo Network_Summary::site_option ?>[share_site]"
-				       value="0" <?php echo checked( $option, '0' ) ?>
+					   name="<?php echo Network_Summary::site_option ?>[share_site]"
+					   value="0" <?php echo checked( $option, '0' ) ?>
 				"> <?php _e( 'No, do not show it at this time.' ); ?>
 			</label>
 		<?php
