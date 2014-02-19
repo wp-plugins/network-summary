@@ -38,11 +38,11 @@ if ( class_exists( 'Network_Summary' ) ) {
 		$network_summary->remove_site_category( $id, $category );
 	}
 
-	function share_site( $id = null) {
+	function share_site( $id = null ) {
 		if ( ! isset( $id ) ) {
 			$id = get_current_blog_id();
 		}
-		$option = get_blog_option($id, Network_Summary::site_option);
+		$option = get_blog_option( $id, Network_Summary::site_option );
 		return $option['share_site'];
 	}
 
@@ -50,7 +50,7 @@ if ( class_exists( 'Network_Summary' ) ) {
 		if ( ! isset( $id ) ) {
 			$id = get_current_blog_id();
 		}
-		$option = get_blog_option($id, Network_Summary::site_option);
+		$option = get_blog_option( $id, Network_Summary::site_option );
 		return $option['site_description'];
 	}
 }

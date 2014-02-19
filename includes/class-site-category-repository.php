@@ -13,8 +13,8 @@ class Site_Category_Repository
 	public function create_table() {
 		global $wpdb;
 
-        $engine = $wpdb->get_row("SELECT ENGINE FROM information_schema.TABLES where TABLE_NAME = '$wpdb->blogs'", ARRAY_A);
-        $engine = $engine['ENGINE'];
+		$engine = $wpdb->get_row( "SELECT ENGINE FROM information_schema.TABLES where TABLE_NAME = '$wpdb->blogs'", ARRAY_A );
+		$engine = $engine['ENGINE'];
 
 		$sql = "CREATE TABLE $wpdb->site_categories (
 			id BIGINT NOT NULL AUTO_INCREMENT,
@@ -26,7 +26,7 @@ class Site_Category_Repository
 		ENGINE $engine,
 		DEFAULT COLLATE utf8_general_ci;";
 
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbdelta( $sql );
 
 		$sql = "CREATE TABLE $wpdb->site_categories_relationships (
@@ -58,7 +58,7 @@ class Site_Category_Repository
 
 	public function delete( $id ) {
 		global $wpdb;
-		return $wpdb->delete( $wpdb->site_categories, array('id' => $id) );
+		return $wpdb->delete( $wpdb->site_categories, array( 'id' => $id ) );
 	}
 
 	public function get_by_id( $id ) {
@@ -68,7 +68,7 @@ class Site_Category_Repository
 
 	public function update( $id, array $category ) {
 		global $wpdb;
-		return $wpdb->update( $wpdb->site_categories, $category, array('id' => $id) );
+		return $wpdb->update( $wpdb->site_categories, $category, array( 'id' => $id ) );
 	}
 
 	public function get_by_site( $site_id ) {
@@ -83,11 +83,11 @@ class Site_Category_Repository
 
 	public function set_site_category( $site, $category ) {
 		global $wpdb;
-		return $wpdb->replace( $wpdb->site_categories_relationships, array('blog_id' => $site, 'category_id' => $category) );
+		return $wpdb->replace( $wpdb->site_categories_relationships, array( 'blog_id' => $site, 'category_id' => $category ) );
 	}
 
 	public function remove_site_category( $site, $category ) {
 		global $wpdb;
-		return $wpdb->delete( $wpdb->site_categories_relationships, array('blog_id' => $site, 'category_id' => $category) );
+		return $wpdb->delete( $wpdb->site_categories_relationships, array( 'blog_id' => $site, 'category_id' => $category ) );
 	}
 }

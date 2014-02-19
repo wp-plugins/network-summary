@@ -27,7 +27,7 @@ class Site_Category_List_Table extends Network_Summary_List_Table
 	}
 
 	protected function get_column_widths() {
-		return array('id' => '5%', 'name' => '20%');
+		return array( 'id' => '5%', 'name' => '20%' );
 	}
 
 	protected function column_name( $item ) {

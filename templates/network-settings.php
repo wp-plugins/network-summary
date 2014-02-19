@@ -5,7 +5,7 @@ if ( ! current_user_can( 'manage_network' ) ) {
 
 if ( isset( $sites_table ) ) :
 	global $network_summary;
-	$option = get_site_option(Network_Summary::network_option);
+	$option = get_site_option( Network_Summary::network_option );
 
 	if ( isset( $_GET['updated'] ) ) {
 		?>
@@ -21,7 +21,7 @@ if ( isset( $sites_table ) ) :
 			Changing this setting has no influence on the current settings of each site.', 'network-summary' ); ?></p>
 	</div>
 	<form method="post"
-	      action="<?php echo admin_url( 'admin-post.php?action=update_network_summary_network_settings' ); ?>">
+		  action="<?php echo admin_url( 'admin-post.php?action=update_network_summary_network_settings' ); ?>">
 		<?php wp_nonce_field( 'network_summary_settings' ); ?>
 		<table class="form-table">
 			<tbody>
@@ -46,7 +46,7 @@ if ( isset( $sites_table ) ) :
 						for="network_option[rss_limit]"><?php _e( 'RSS Feed Limit', 'network-summary' ); ?></label></th>
 				<td>
 					<input name="network_option[rss_limit]" type="number" min="1" max="1000" required
-					       value="<?php echo $option['rss_limit']; ?>"/>
+						   value="<?php echo $option['rss_limit']; ?>"/>
 				</td>
 			</tr>
 			</tbody>

@@ -11,7 +11,7 @@ abstract class Network_Summary_List_Table
 	protected abstract function get_items();
 
 	public function has_items() {
-		return ! empty($this->items);
+		return ! empty( $this->items );
 	}
 
 	public function no_items() {
@@ -32,11 +32,11 @@ abstract class Network_Summary_List_Table
 		return array(
 			$this->get_all_columns(),
 			$this->get_hidden_columns(),
-			$this->get_column_widths());
+			$this->get_column_widths() );
 	}
 
 	private function get_column_count() {
-		list ($columns, $hidden) = $this->get_column_info();
+		list ( $columns, $hidden ) = $this->get_column_info();
 		$hidden = array_intersect( array_keys( $columns ), array_filter( $hidden ) );
 		return count( $columns ) - count( $hidden );
 	}
@@ -67,15 +67,15 @@ abstract class Network_Summary_List_Table
 	}
 
 	private function print_column_headers( $with_id = true ) {
-		list($columns, $hidden, $widths) = $this->get_column_info();
+		list( $columns, $hidden, $widths ) = $this->get_column_info();
 
 		foreach ( $columns as $column_key => $column_display_name ) {
-			$class = array("column-$column_key");
+			$class = array( "column-$column_key" );
 
 			$style = '';
 			if ( in_array( $column_key, $hidden ) ) {
 				$style = 'display:none;';
-			} else if ( isset($widths[$column_key]) ) {
+			} else if ( isset( $widths[$column_key] ) ) {
 				$style = 'width:' . $widths[$column_key];
 			}
 
@@ -85,7 +85,7 @@ abstract class Network_Summary_List_Table
 
 			$id = $with_id ? "id='$column_key'" : '';
 
-			if ( ! empty($class) ) {
+			if ( ! empty( $class ) ) {
 				$class = "class='" . join( ' ', $class ) . "'";
 			}
 
@@ -94,7 +94,7 @@ abstract class Network_Summary_List_Table
 	}
 
 	private function get_table_classes() {
-		return array('widefat', 'fixed');
+		return array( 'widefat', 'fixed' );
 	}
 
 	protected function display_tablenav( $which ) {
@@ -123,7 +123,7 @@ abstract class Network_Summary_List_Table
 
 	private function single_row( $item ) {
 		static $row_class = '';
-		$row_class = ($row_class == '' ? ' class="alternate"' : '');
+		$row_class = ( $row_class == '' ? ' class="alternate"' : '' );
 
 		echo '<tr' . $row_class . '>';
 		$this->single_row_columns( $item );
@@ -131,7 +131,7 @@ abstract class Network_Summary_List_Table
 	}
 
 	private function single_row_columns( $item ) {
-		list($columns, $hidden) = $this->get_column_info();
+		list( $columns, $hidden ) = $this->get_column_info();
 
 		foreach ( $columns as $column_name => $column_display_name ) {
 			$class = "class='$column_name column-$column_name'";
@@ -148,12 +148,12 @@ abstract class Network_Summary_List_Table
 
 	private function single_row_column_value( $column_name, $item ) {
 		if ( method_exists( $this, 'column_' . $column_name ) ) {
-			return call_user_func( array($this, 'column_' . $column_name), $item );
+			return call_user_func( array( $this, 'column_' . $column_name ), $item );
 		} elseif ( method_exists( $item, 'get' . ucfirst( $column_name ) ) ) {
-			return call_user_func( array($item, 'get' . ucfirst( $column_name )), $item );
+			return call_user_func( array( $item, 'get' . ucfirst( $column_name ) ), $item );
 		} elseif ( is_object( $item ) && property_exists( $item, $column_name ) ) {
 			return $item->$column_name;
-		} elseif ( is_array( $item ) && isset($item[$column_name]) ) {
+		} elseif ( is_array( $item ) && isset( $item[$column_name] ) ) {
 			return $item[$column_name];
 		} else {
 			return '';
