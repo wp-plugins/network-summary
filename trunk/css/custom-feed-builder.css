@@ -1,0 +1,31 @@
+#content #custom-feed-input {
+    width: 100%;
+    display: block;
+
+    padding: 5px;
+    font-family: Consolas, Monaco, 'Courier New', monospace;
+    border: 1px solid grey;
+    font-weight: bold;
+    height: 70px;
+}
+
+.site-checkbox-label {
+    display: inline-block;
+    min-width: 45%;
+}
+
+#custom-feed-form {
+    margin-bottom: 20px;
+}
+
+.select-all, .deselect-all {
+    display: inline-block;
+    cursor: pointer;
+    margin-bottom: 3px;
+    margin-right: 5px;
+    font-size: .8em;
+}
+
+.category {
+    margin-bottom: 15px;
+}

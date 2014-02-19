@@ -5,6 +5,7 @@ require_once plugin_dir_path( __FILE__ ) . 'class-network-overview-shortcode.php
 require_once plugin_dir_path( __FILE__ ) . 'class-network-single-shortcode.php';
 require_once plugin_dir_path( __FILE__ ) . 'class-network-all-shortcode.php';
 require_once plugin_dir_path( __FILE__ ) . 'class-site-category-repository.php';
+require_once plugin_dir_path( __FILE__ ) . 'class-custom-feed-builder-page.php';
 
 class Network_Summary
 {
@@ -33,6 +34,12 @@ class Network_Summary
 		add_action( 'wpmu_new_blog', array( $this, 'add_new_site' ) );
 		add_action( 'widgets_init', array( $this, 'register_widgets' ) );
 		add_action( 'init', array( $this, 'init' ) );
+
+		new Custom_Feed_Builder_Page(
+			'network-feed',
+			'network-feed',
+			NETWORK_SUMMARY_DIR . 'templates/custom-feed-builder.php'
+		);
 	}
 
 	/**
@@ -168,7 +175,7 @@ class Network_Summary
 	public function get_sites( $expires = 7200 ) {
 		if ( false === ( $site_list = get_transient( 'network_summary_site_list' ) ) ) {
 			global $wpdb;
-			$site_list = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs ORDER BY blog_id ASC" );
+			$site_list = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs ORDER BY domain ASC" );
 			set_site_transient( 'network_summary_site_list', $site_list, $expires );
 		}
 		return $site_list;
