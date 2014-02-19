@@ -41,7 +41,8 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 			'sort' => 'abc',
 			'layout' => 'table',
 			'images' => 'true',
-			'rss' => 'true'
+			'rss' => 'true',
+			'minposts' => 0,
 		), $atts, 'netview' );;
 
 		if ( ! is_array( $args['category'] ) ) {
@@ -111,6 +112,13 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 		$this->args['images'] = $this->extract_boolVal( $this->args['images'] );
 		$this->args['rss'] = $this->extract_boolVal( $this->args['rss'] );
 
+		if ( ! is_numeric( $this->args['minposts'] ) || $this->args['minposts'] < 0 ) {
+			array_push(
+				$this->errors,
+				'Illegal parameter <code>minposts</code> (must be integer value greater or equal than 0).'
+			);
+		}
+
 		$this->sites = array();
 
 		if ( ! empty( $this->args['category'] ) ) {
@@ -125,9 +133,9 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 
 		global $network_summary;
 		if ( empty( $this->args['category'] ) && empty( $this->args['include'] ) ) {
-			$this->sites = $network_summary->get_shared_sites();
+			$this->sites = $network_summary->get_shared_sites( $this->args['minposts'] );
 		} else {
-			$this->sites = array_intersect( $this->sites, $network_summary->get_shared_sites() );
+			$this->sites = array_intersect( $this->sites, $network_summary->get_shared_sites( $this->args['minposts'] ) );
 		}
 
 		$this->sites = array_diff( $this->sites, $this->args['exclude'] );

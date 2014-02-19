@@ -31,11 +31,12 @@ Options:
 * `include` (optional, defaults: all available) expects a comma separated list of site ids. It will only will list these sites.
 * `exclude` (optional) expects a comma separated list of site ids. It will list all sites except the listed ones.
 * `category` (optional) expects a comma seperated list of category ids. Only sites within these categories will be displayed, regardless of the include parameter. The exclude parameter will still apply.
-* `numposts` (optional, default: 2) expects a number. Limits the number of most recent published posts displayed.
+* `numposts` (optional, default: 2) expects a positive number or zero. Limits the number of most recent published posts displayed.
 * `sort` (optional, default: 'abc') expects either 'abc' or 'posts'. 'abc' means alphabetical sorting. 'posts' will sort the sites according to their most recent post.
 * `layout` (optional, default: 'table') expects either 'grid' or 'table'. Defines the layout of the list. Grid uses two columns. Table uses one row per site.
 * `images` (optional, default: 'true') expects either 'true' or 'false'. Defines whether header images of the sites are displayed if available.
 * `rss` (optional, default: 'true') expects either 'true' or 'false'. Defines whether a custom rss feed link should be displayed.
+* `minposts` (optional, default: 0) expects a positive number or zero. Defines a limit of posts a site must have published in order to be shown.
 
 Example:
 
@@ -67,6 +68,11 @@ Description: Displays all visible sites in form of an index in alphabetical orde
 3. Here the site categories can be managed.
 
 == Changelog ==
+
+= 2.0.5 =
+* Fixed permalink structure in rss feed.
+* Flushing rewrite rules at the correct moment.
+* Adding minposts parameter.
 
 = 2.0.4 =
 * Simplified RSS feed urls.

@@ -184,13 +184,16 @@ class Network_Summary
 			 ORDER BY blog_id ASC" );
 	}
 
-	public function get_shared_sites() {
+	public function get_shared_sites( $minposts = 0 ) {
 		$shared_sites = array();
 		$site_list = $this->get_sites();
 		foreach ( $site_list as $site_id ) {
-			if ( share_site( $site_id ) ) {
+			switch_to_blog( $site_id );
+			$count_posts = wp_count_posts()->publish;
+			if ( share_site( $site_id ) && $count_posts >= $minposts ) {
 				array_push( $shared_sites, $site_id );
 			}
+			restore_current_blog();
 		}
 		return $shared_sites;
 	}
