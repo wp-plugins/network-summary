@@ -19,6 +19,7 @@ if ( class_exists( 'Network_Summary' ) ) {
 	$network_summary = new Network_Summary();
 
 	register_activation_hook( __FILE__, array( $network_summary, 'activate' ) );
+	register_deactivation_hook( __FILE__, array( $network_summary, 'deactivate' ) );
 
 	function get_site_categories( $id = null ) {
 		if ( ! isset( $id ) ) {

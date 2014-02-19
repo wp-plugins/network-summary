@@ -11,7 +11,7 @@ class Network_Summary
 	const site_option = 'network_summary';
 	const network_option = 'network_summary_network';
 	const version_option = 'network_summary_version';
-	const version = '2.0.4';
+	const version = '2.0.5';
 
 	private $site_categories;
 
@@ -44,15 +44,14 @@ class Network_Summary
 		}
 		add_site_option( Network_Summary::network_option, $this->get_default_network_values() );
 		add_site_option( Network_Summary::version_option, Network_Summary::version );
-		flush_rewrite_rules();
-
 		$this->site_categories->create_table();
 	}
 
 	public function get_default_site_values() {
 		return array(
 			'share_site' => false,
-			'site_description' => ''
+			'site_description' => '',
+			'flushed_rewrite_rules' => false
 		);
 	}
 
@@ -101,6 +100,12 @@ class Network_Summary
 				$engine = $engine['ENGINE'];
 				$wpdb->query( "ALTER TABLE $wpdb->site_categories ENGINE=$engine" );
 				$wpdb->query( "ALTER TABLE $wpdb->site_categories_relationships ENGINE=$engine" );
+			case '2.0.4':
+				foreach ( $this->get_sites() as $site_id ) {
+					$option = get_blog_option( $site_id, Network_Summary::site_option );
+					$option['flushed_rewrite_rules'] = false;
+					update_blog_option( $site_id, Network_Summary::site_option, $option );
+				}
 		}
 
 		if ( $old_version !== Network_Summary::version ) {
@@ -124,6 +129,14 @@ class Network_Summary
 	 */
 	public function init() {
 		add_feed( 'rss2-network', array( $this, 'get_rss2_feed' ) );
+
+		$options = get_option( Network_Summary::site_option );
+		if ( ! $options['flushed_rewrite_rules'] ) {
+			flush_rewrite_rules();
+			$options['flushed_rewrite_rules'] = true;
+			update_option( Network_Summary::site_option, $options );
+		}
+
 		wp_register_style(
 			'network_summary',
 			NETWORK_SUMMARY_URL . 'css/network-summary.css',
