@@ -28,17 +28,17 @@ get_header(); ?>
 				global $network_summary;
 				$categories = $network_summary->get_all_categories();
 				foreach ( $categories as $category_id => $category ) : ?>
-					<div id="category-<?php echo $category_id; ?>" class="category">
-						<input type="hidden" class="category-id" value="<?php echo $category_id; ?>"/>
-
+					<div class="category">
 						<h3><?php echo esc_html( $category->name ); ?></h3>
-
 						<p><?php echo esc_html( $category->description ); ?></p>
-
 						<div class="rss-builder-form">
 							<div>
-								<a class="select-all"><?php _e( 'Select All', 'network-summary' ); ?></a>
-								<a class="deselect-all"><?php _e( 'Deselect All', 'network-summary' ); ?></a>
+								<a class="select-all" data-category="<?php echo $category_id; ?>">
+									<?php _e( 'Select All', 'network-summary' ); ?>
+								</a>
+								<a class="deselect-all" data-category="<?php echo $category_id; ?>">
+									<?php _e( 'Deselect All', 'network-summary' ); ?>
+								</a>
 							</div>
 
 							<?php
@@ -46,8 +46,10 @@ get_header(); ?>
 
 							foreach ( $sites as $site_id ) : ?>
 								<label class="site-checkbox-label">
-									<input type="hidden" class="site-id" value="<?php echo $site_id; ?>"/>
-									<input type="checkbox" class="site-checkbox">
+									<input type="checkbox" class="site-checkbox"
+										   data-category="<?php echo $category_id; ?>"
+										   data-site="<?php echo $site_id; ?>"
+										/>
 									<?php echo get_blog_option( $site_id, 'blogname' ); ?>
 								</label>
 							<?php endforeach; ?>
