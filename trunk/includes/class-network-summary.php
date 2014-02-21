@@ -195,6 +195,22 @@ class Network_Summary
 		return $result;
 	}
 
+	public function get_sites_without_category( $show_only_shared = false ) {
+		global $wpdb;
+		$result = $wpdb->get_col(
+			"SELECT blogs.blog_id
+			 FROM $wpdb->blogs blogs
+			 WHERE blogs.blog_id not in (
+			 	SELECT DISTINCT rel.blog_id
+			 	FROM $wpdb->site_categories_relationships rel
+			 )
+			 ORDER BY blog_id ASC" );
+		if ( $show_only_shared ) {
+			$result = array_intersect( $result, $this->get_shared_sites() );
+		}
+		return $result;
+	}
+
 	public function get_shared_sites( $minposts = 0 ) {
 		$shared_sites = array();
 		$site_list = $this->get_sites();

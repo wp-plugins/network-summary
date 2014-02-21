@@ -9,7 +9,7 @@
     box-sizing: border-box;
 }
 
-.site-checkbox-label {
+.site {
     display: inline-block;
     min-width: 45%;
 }
@@ -27,7 +27,25 @@
 }
 
 .category {
-    margin-bottom: 30px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px dotted;
+}
+
+.category label {
+    color: #666;
+}
+
+#content .category h3 {
+    margin-bottom: 10px;
+}
+
+.category-description {
+    font-size: .9em;
+}
+
+.select-category {
+    margin-bottom: 10px;
 }
 
 .pure-button {
