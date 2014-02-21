@@ -73,6 +73,7 @@ Description: Displays all visible sites in form of an index in alphabetical orde
 * Fixed permalink structure in rss feed.
 * Flushing rewrite rules at the correct moment.
 * Adding minposts parameter.
+* Added a custom rss feed builder.
 
 = 2.0.4 =
 * Simplified RSS feed urls.
