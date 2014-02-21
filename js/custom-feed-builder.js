@@ -1,6 +1,6 @@
 (function ($) {
     function RssBuilder($element) {
-        var baseUrl = $element.val();
+        var baseUrl = $element.data('base-url');
         var categories = [];
         var sites = [];
         var output = $element;
@@ -26,9 +26,16 @@
                 url += '?' + serialize(categories, 'category');
             }
             if (sites.length > 0) {
-                url += '?' + serialize(sites, 'sites');
+                if (categories.length > 0) {
+                    url += '&';
+                } else {
+                    url += '?';
+                }
+                url += serialize(sites, 'sites');
             }
             output.val(url);
+            $('.rss-message.error').hide();
+            $('.rss-message.valid').hide();
         };
 
         this.addCategory = function (category) {
@@ -56,10 +63,49 @@
                 sites.splice(index, 1);
             }
         };
+
+        this.reset = function () {
+            categories = [];
+            sites = [];
+            this.buildFeed();
+        };
+
+        this.validate = function (feed) {
+            return feed.match(/^http:\/\/magicjudges\.aleaiactaest\.ch\/feed\/rss2-network\/(\?((category=[0-9]+&?)|(category%5B[0-9]+%5D=[0-9]+&?)+|sites%5B[0-9]+%5D=[0-9]+&?)*)?$/);
+        };
+
+        this.parse = function (feed) {
+            this.reset();
+            var params = decodeURI(feed.substring(feed.search(/\?/) + 1));
+
+            var c = params.match(/category(\[[^\]*]\])?=\d+/g);
+            var s = params.match(/sites(\[[^\]*]\])?=\d+/g);
+            if (c != null) {
+                for (var i = 0; i < c.length; i++) {
+                    if (c[i] !== null) {
+                        categories.push(parseInt(c[i].substr(c[i].search(/=/) + 1)));
+                    }
+                }
+            }
+            if (s != null) {
+                for (i = 0; i < s.length; i++) {
+                    sites.push(parseInt(s[i].substr(s[i].search(/=/) + 1)));
+                }
+            }
+            this.buildFeed();
+        };
+
+        this.getCategories = function () {
+            return categories;
+        };
+
+        this.getSites = function () {
+            return sites;
+        };
     }
 
-    var rssBuilder = new RssBuilder($('#custom-feed-input'));
-
+    var $feed = $('#custom-feed-input');
+    var rssBuilder = new RssBuilder($feed);
 
     $('.select-all').click(function () {
         var $checkboxes = $(this).closest('.category').find('input.site-checkbox')
@@ -114,5 +160,30 @@
             rssBuilder.removeSite(siteId);
         }
         rssBuilder.buildFeed();
+    });
+
+    $('#custom-feed-reset').click(function () {
+        $('.site-checkbox').prop('checked', false);
+        rssBuilder.reset();
+    });
+
+    $feed.focusout(function () {
+        var feed = $feed.val();
+        if (rssBuilder.validate(feed)) {
+            $('.rss-message.error').hide();
+            $('.rss-message.valid').show();
+
+            rssBuilder.parse(feed);
+
+            $('.site-checkbox').each(function () {
+                if (rssBuilder.getCategories().indexOf(parseInt($(this).data('category'))) > -1 ||
+                    rssBuilder.getSites().indexOf(parseInt($(this).data('site'))) > -1) {
+                    $(this).prop('checked', true);
+                }
+            });
+        } else {
+            $('.rss-message.valid').hide();
+            $('.rss-message.error').show();
+        }
     });
 })(jQuery);

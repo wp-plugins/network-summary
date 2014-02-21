@@ -6,18 +6,23 @@
 
 global $network_summary;
 
+$sites = array();
+
 if ( isset( $_GET['sites'] ) ) {
 	$sites = $_GET['sites'];
-} elseif ( isset( $_GET['category'] ) ) {
+}
+
+if ( isset( $_GET['category'] ) ) {
 	if ( is_array( $_GET['category'] ) ) {
-		$sites = array();
 		foreach ( $_GET['category'] as $category ) {
 			$sites = array_merge( $sites, $network_summary->get_sites_per_category( $category ) );
 		}
 	} else {
 		$sites = $network_summary->get_sites_per_category( $_GET['category'] );
 	}
-} else {
+}
+
+if ( empty( $sites ) ) {
 	$sites = $network_summary->get_sites();
 }
 

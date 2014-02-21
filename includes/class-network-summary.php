@@ -181,14 +181,18 @@ class Network_Summary
 		return $site_list;
 	}
 
-	public function get_sites_per_category( $category_id ) {
+	public function get_sites_per_category( $category_id, $show_only_shared = false ) {
 		global $wpdb;
-		return $wpdb->get_col(
+		$result = $wpdb->get_col(
 			"SELECT blogs.blog_id
 			 FROM $wpdb->blogs blogs
 			 JOIN $wpdb->site_categories_relationships rel ON blogs.blog_id = rel.blog_id
 			 WHERE rel.category_id = $category_id
 			 ORDER BY blog_id ASC" );
+		if ( $show_only_shared ) {
+			$result = array_intersect( $result, $this->get_shared_sites() );
+		}
+		return $result;
 	}
 
 	public function get_shared_sites( $minposts = 0 ) {
