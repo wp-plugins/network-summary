@@ -20,8 +20,9 @@ get_header(); ?>
 		<div id="content" role="main">
 			<h1><?php _e( 'Custom RSS Feed Builder', 'network-summary' ); ?></h1>
 
-			<p><?php _e( 'Build your own custom feed for this network of blogs by checking
-			the sites you wish to be included in the feed.', 'network-summary' ); ?></p>
+			<p><?php _e( 'Build your own custom feed for this network by checking the sites you wish to be included in the feed. After selecting your categories and/or individual sites, your URL for your custom RSS feed will be available at the bottom of this page.', 'network-summary' ); ?></p>
+
+			<p><?php _e( 'You can also paste the URL from a custom feed there in order to modify it.', 'network-summary' ); ?></p>
 
 			<div id="custom-feed-form">
 				<?php
@@ -33,46 +34,82 @@ get_header(); ?>
 						<div class="category">
 							<h3><?php echo esc_html( $category->name ); ?></h3>
 
-							<p><?php echo esc_html( $category->description ); ?></p>
+							<p class="category-description"><?php echo esc_html( $category->description ); ?></p>
 
 							<div class="rss-builder-form">
-								<div>
-									<a class="select-all" data-category="<?php echo $category_id; ?>">
-										<?php _e( 'Select All', 'network-summary' ); ?>
-									</a>
-									<a class="deselect-all" data-category="<?php echo $category_id; ?>">
-										<?php _e( 'Deselect All', 'network-summary' ); ?>
-									</a>
-								</div>
-
-								<?php
-								foreach ( $sites as $site_id ) : ?>
-									<label class="site-checkbox-label">
-										<input type="checkbox" class="site-checkbox"
-											   data-category="<?php echo $category_id; ?>"
-											   data-site="<?php echo $site_id; ?>"
-											/>
-										<?php echo get_blog_option( $site_id, 'blogname' ); ?>
+								<div class="select-category">
+									<label>
+										<input type="checkbox" class="category-checkbox"
+											   data-category="<?php echo $category_id; ?>">
+										<?php _e( 'Subscribe to all sites in this category (including any new sites)', 'network-summary' ); ?>
 									</label>
-								<?php endforeach; ?>
+								</div>
+								<div class="sites">
+									<?php if ( count( $sites ) > 1 ) : ?>
+										<div>
+											<a class="select-all">
+												<?php _e( 'Select All', 'network-summary' ); ?>
+											</a>
+											<a class="deselect-all"">
+											<?php _e( 'Deselect All', 'network-summary' ); ?>
+											</a>
+										</div>
+									<?php endif; ?>
+									<?php
+									foreach ( $sites as $site_id ) : ?>
+										<label class="site">
+											<input type="checkbox" class="site-checkbox"
+												   data-site="<?php echo $site_id; ?>"
+												/>
+											<?php echo get_blog_option( $site_id, 'blogname' ); ?>
+										</label>
+									<?php endforeach; ?>
+								</div>
 							</div>
 						</div>
 					<?php endif;
-				endforeach; ?>
+				endforeach;
+
+				$sites = $network_summary->get_sites_without_category( true );
+				if ( ! empty( $sites ) ) : ?>
+					<div id="no-category">
+						<h3><?php _e( 'Other sites', 'network-summary' ); ?></h3>
+
+						<div class="sites">
+							<?php if ( count( $sites ) > 1 ) : ?>
+								<div>
+									<a class="select-all">
+										<?php _e( 'Select All', 'network-summary' ); ?>
+									</a>
+									<a class="deselect-all"">
+									<?php _e( 'Deselect All', 'network-summary' ); ?>
+									</a>
+								</div>
+							<?php endif; ?>
+							<?php
+							foreach ( $sites as $site_id ) : ?>
+								<label class="site">
+									<input type="checkbox" class="site-checkbox"
+										   data-site="<?php echo $site_id; ?>"
+										/>
+									<?php echo get_blog_option( $site_id, 'blogname' ); ?>
+								</label>
+							<?php endforeach; ?>
+						</div>
+					</div>
+				<?php endif; ?>
 			</div>
 			<div id="custom-feed-result">
-				<p><?php
-					_e( 'Below you can find your custom feed url. Use this in your favorite feed reader.', 'network-summary' );
-					echo '<br>';
-					_e( 'Alternatively you can copy an existing url in the field to modify it.', 'network-summary' ); ?>
-				</p>
+				<p class="rss-message error"><?php _e( 'Sorry, but the entered rss url is not valid.', 'network-summary' ); ?></p>
 
-				<p class="rss-message error"><?php _e('Sorry, but the entered rss url is not valid.', 'network-summary'); ?></p>
-				<p class="rss-message valid"><?php _e('The entered rss url was successfully validated!', 'network-summary'); ?></p>
+				<p class="rss-message valid"><?php _e( 'The entered rss url was successfully validated!', 'network-summary' ); ?></p>
 
-				<input type="text" id="custom-feed-input" onclick="jQuery(this).select();"
-					   data-base-url="<?php echo get_feed_link( 'rss2-network' ); ?>"
-					   value="<?php echo get_feed_link( 'rss2-network' ); ?>"/>
+				<label>
+					<?php _e( 'Use this url in your rss feed reader:', 'network-summary' ); ?>
+					<input type="text" id="custom-feed-input" onclick="jQuery(this).select();"
+						   data-base-url="<?php echo get_feed_link( 'rss2-network' ); ?>"
+						   value="<?php echo get_feed_link( 'rss2-network' ); ?>"/>
+				</label>
 				<input id="custom-feed-reset" type="button" value="Reset" class="pure-button"/>
 			</div>
 		</div>
