@@ -1,0 +1,13 @@
+th.label-row-deciding-role {
+    width: 250px;
+    vertical-align: middle;
+}
+
+td.column-sharing label {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+select.category-select {
+    width: 100%;
+}
