@@ -1,98 +1,118 @@
 (function ($) {
-    var categories = [];
-    var sites = [];
-    var base_url = $('#custom-feed-input').val();
+    function RssBuilder($element) {
+        var baseUrl = $element.val();
+        var categories = [];
+        var sites = [];
+        var output = $element;
 
-    function serialize(obj, prefix) {
-        var str = [];
-        for (var p in obj) {
-            var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
-            str.push(typeof v == "object" ?
-                serialize(v, k) :
-                encodeURIComponent(k) + "=" + encodeURIComponent(v));
+        function serialize(obj, prefix) {
+            var str = [];
+            for (var p in obj) {
+                var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
+                str.push(typeof v == "object" ?
+                    serialize(v, k) :
+                    encodeURIComponent(k) + "=" + encodeURIComponent(v));
+            }
+            return str.join("&");
         }
-        return str.join("&");
+
+        this.buildFeed = function () {
+            var url = baseUrl;
+
+            if (categories.length == 1) {
+                url += '?category=' + categories[0];
+            }
+            if (categories.length > 1) {
+                url += '?' + serialize(categories, 'category');
+            }
+            if (sites.length > 0) {
+                url += '?' + serialize(sites, 'sites');
+            }
+            output.val(url);
+        };
+
+        this.addCategory = function (category) {
+            if (categories.indexOf(category) === -1) {
+                categories.push(category);
+            }
+        };
+
+        this.removeCategory = function (category) {
+            var index = categories.indexOf(category);
+            if (index > -1) {
+                categories.splice(index, 1);
+            }
+        };
+
+        this.addSite = function (site) {
+            if (sites.indexOf(site) === -1) {
+                sites.push(site);
+            }
+        };
+
+        this.removeSite = function (site) {
+            var index = sites.indexOf(site);
+            if (index > -1) {
+                sites.splice(index, 1);
+            }
+        };
     }
 
-    function addCategory(categoryId) {
-        if (categories.indexOf(categoryId) === -1) {
-            $('#category-' + categoryId).find('.site-id').each(function () {
-                var siteId = parseInt($(this).prev('.site-id').val());
-                removeSite(siteId);
-            });
-            categories.push(categoryId);
-        }
-    }
+    var rssBuilder = new RssBuilder($('#custom-feed-input'));
 
-    function addSite(siteId) {
-        if (sites.indexOf(siteId) === -1) {
-            sites.push(siteId);
-        }
-    }
-
-    function removeCategory(categoryId) {
-        var index = categories.indexOf(categoryId);
-        if (index > -1) {
-            categories.splice(index, 1);
-        }
-        $('#category-' + categoryId).find('.site-checkbox:checked').each(function () {
-            var siteId = parseInt($(this).prev('.site-id').val());
-            addSite(siteId);
-        });
-    }
-
-    function removeSite(siteId) {
-        var index = sites.indexOf(siteId);
-        if (index > -1) {
-            sites.splice(index, 1);
-        }
-    }
 
     $('.select-all').click(function () {
-        $(this).closest('.category').find('input.site-checkbox').prop('checked', true);
-        var categoryId = parseInt($(this).closest('.category').find('.category-id').val());
-        addCategory(categoryId);
-        buildFeed();
+        var $checkboxes = $(this).closest('.category').find('input.site-checkbox')
+        $checkboxes.prop('checked', true);
+
+        $checkboxes.each(function () {
+            var siteId = parseInt($(this).data('site'));
+            rssBuilder.removeSite(siteId);
+        });
+
+        var categoryId = parseInt($(this).data('category'));
+        rssBuilder.addCategory(categoryId);
+        rssBuilder.buildFeed();
     });
 
     $('.deselect-all').click(function () {
-        $(this).closest('.category').find('input.site-checkbox').prop('checked', false);
-        var categoryId = parseInt($(this).closest('.category').find('.category-id').val());
-        removeCategory(categoryId);
-        $(this).closest('.category').find('.site-id').each(function () {
-            var siteId = parseInt($(this).val());
-            removeSite(siteId);
+        var $checkboxes = $(this).closest('.category').find('input.site-checkbox');
+        $checkboxes.prop('checked', false);
+
+        $checkboxes.each(function () {
+            var siteId = parseInt($(this).data('site'));
+            rssBuilder.removeSite(siteId);
         });
-        buildFeed();
+
+        var categoryId = parseInt($(this).data('category'));
+        rssBuilder.removeCategory(categoryId);
+
+        rssBuilder.buildFeed();
     });
 
-    function buildFeed() {
-        var url = base_url;
-        if (categories.length == 1) {
-            url += '?category=' + categories[0];
-        }
-        if (categories.length > 1) {
-            url += '?' + serialize(categories, 'category');
-        }
-        if (sites.length > 0) {
-            url += '?' + serialize(sites, 'sites');
-        }
-        $('#custom-feed-input').val(url);
-    }
-
     $('.site-checkbox').change(function () {
-        var categoryId = parseInt($(this).closest('.category').find('.category-id').val());
-        var siteId = parseInt($(this).prev('.site-id').val());
+        var categoryId = parseInt($(this).data('category'));
+        var siteId = parseInt($(this).data('site'));
+        var $category = $(this).closest('.category');
+
         if (this.checked) {
-            if ($(this).closest('.category').find('.site-checkbox').not(':checked').length === 0) {
-                addCategory(categoryId);
+            if ($category.find('.site-checkbox').not(':checked').length === 0) {
+                $category.find('.site-checkbox').each(function () {
+                    var siteId = parseInt($(this).data('site'));
+                    rssBuilder.removeSite(siteId);
+                });
+                rssBuilder.addCategory(categoryId);
             } else {
-                addSite(siteId);
+                rssBuilder.addSite(siteId);
             }
         } else {
-            removeCategory(categoryId);
-            removeSite(siteId);
+            rssBuilder.removeCategory(categoryId);
+            $category.find('.site-checkbox:checked').each(function () {
+                var siteId = parseInt($(this).data('site'));
+                rssBuilder.addSite(siteId);
+            });
+            rssBuilder.removeSite(siteId);
         }
-        buildFeed();
+        rssBuilder.buildFeed();
     });
 })(jQuery);
