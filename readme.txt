@@ -3,7 +3,7 @@ Contributors: jokr
 Tags: description, multisite, overview
 Requires at least: 3.5.2
 Tested up to: 3.8.1
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,6 +17,8 @@ or multiple categories.
 
 In order to have consistent information about each site, it also adds a new field *Description* to each site which should
 provide a summary of the site's content.
+
+There is also a new feed available (any site has this feed, it can be called with `/feed/rss2-network`) which offers an aggregated way to get updated on the whole network. In order to allow users to customize their feeds, a feed builder page is included. This page can also be called on any site of the network with the url `network-feed`.
 
 Currently there are three shortcodes available:
 
