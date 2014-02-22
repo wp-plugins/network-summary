@@ -135,23 +135,28 @@
     }
 
     $('.select-all').click(function () {
-        $(this).closest('.category').find('input.site-checkbox').prop('checked', true).trigger('change');
+        $(this).closest('.category, #no-category').find('input.site-checkbox').prop('checked', true).trigger('change');
     });
 
     $('.deselect-all').click(function () {
-        $(this).closest('.category').find('input.site-checkbox').prop('checked', false).trigger('change');
+        $(this).closest('.category, #no-category').find('input.site-checkbox').prop('checked', false).trigger('change');
     });
 
     $('.category-checkbox').change(function () {
+        var status = this.checked;
         var $elements = $(this).closest('.category').find('input.site-checkbox');
         //$(this).closest('.category').find('.sites').hide(100);
-        $elements.prop('disabled', this.checked).prop('checked', this.checked).trigger('change');
+        $elements.prop('disabled', status).prop('checked', status);
         buildFeed();
+        $elements.each(function (index, element) {
+            var id = $(element).data('site');
+            $('.site-checkbox[data-site=' + id + ']').not(':disabled').prop('checked', status);
+        });
     });
 
     $('.site-checkbox').change(function () {
         var id = $(this).data('site');
-        $('.site-checkbox[data-site=' + id + ']').prop('checked', this.checked);
+        $('.site-checkbox[data-site=' + id + ']').not(':disabled').prop('checked', this.checked);
         buildFeed();
     });
 
