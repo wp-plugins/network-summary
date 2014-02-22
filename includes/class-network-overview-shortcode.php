@@ -159,6 +159,7 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 				$result .= '<table class="netview-site"><tbody>';
 			}
 			foreach ( $this->sites as $site_id ) {
+				$date_format = get_option( 'date_format' );
 				switch_to_blog( $site_id );
 				$name = '<h2 class="site-title"><a href="' . site_url() . '">' . get_bloginfo() . '</a></h2>';
 				$description = wpautop( do_shortcode( site_description() ) );
@@ -168,7 +169,7 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 					$picture = '';
 				}
 				if ( $numposts > 0 ) {
-					$recent_posts = $this->get_recent_posts( $this->args['numposts'], get_option( 'date_format' ) );
+					$recent_posts = $this->get_recent_posts( $this->args['numposts'], $date_format );
 				} else {
 					$recent_posts = '';
 				}
@@ -212,7 +213,7 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 	}
 
 	private function get_rss2_url() {
-		$query = array( 'feed' => 'rss2-network' );
+		$query = array();
 		if ( ! empty( $this->args['category'] ) && empty( $this->args['include'] ) && empty( $this->args['exclude'] ) ) {
 			if ( count( $this->args['category'] ) == 1 ) {
 				$query['category'] = $this->args['category'][0];
@@ -222,7 +223,8 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 		} elseif ( ! empty( $this->args['include'] ) || ! empty( $this->args['exclude'] ) ) {
 			$query['sites'] = $this->sites;
 		}
-		return trailingslashit( get_bloginfo( 'url' ) ) . '?' . http_build_query( $query );
+		$url = trailingslashit( get_feed_link('rss2-network') );
+		return empty($query) ? $url : $url . '?' . http_build_query( $query );
 	}
 }
 

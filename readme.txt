@@ -3,22 +3,19 @@ Contributors: jokr
 Tags: description, multisite, overview
 Requires at least: 3.5.2
 Tested up to: 3.8.1
-Stable tag: 2.0.5
+Stable tag: 2.0.6
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin enables sites of a network to display information and posts from other sites within the same network.
+This plugin enables sites of a network to display information and posts from other sites within the same network. This happens through shortcodes and custom rss feeds.
 
 == Description ==
 
-With this plugin each site of a network can decide whether its content can be displayed by other sites within the network.
-The plugin offers three different shortcodes to display such content. To make the grouping of sites easier, each site can have one
-or multiple categories.
+WordPress networks can consist of many different sites which are usually kept separate. With this plugin the network admin and the site admins can change that and display content from other sites in the same network as well.
 
-In order to have consistent information about each site, it also adds a new field *Description* to each site which should
-provide a summary of the site's content.
+All sites can be categorized in any number of categories to allow structure and grouping. Also each site now can enter its own description to provide the reader with more detailed information about the site.
 
-There is also a new feed available (any site has this feed, it can be called with `/feed/rss2-network`) which offers an aggregated way to get updated on the whole network. In order to allow users to customize their feeds, a feed builder page is included. This page can also be called on any site of the network with the url `network-feed`.
+Finally the content can be displayed in multiple ways. There are three shortcodes that offer a high flexibility in parameters and filters to display a list of sites with the most recent posts on any other site. Going further the plugin adds a new rss that aggregates posts of all sites or only certain categories. It also adds a custom feed builder which allows each user to build a customized feed with only the sites she or he is interested in.
 
 Currently there are three shortcodes available:
 
@@ -63,13 +60,29 @@ Description: Displays all visible sites in form of an index in alphabetical orde
 1. Upload the `network-summary` directory to the `/wp-content/plugins/` directory.
 1. Activate the plugin through the 'Plugins' menu in the network administration area.
 
+== Frequently asked questions ==
+
+= Where do I find the new feed? =
+
+The new feed is available on any site of the network under the url `{site-url}\feed\rss2-network`.
+
+= Where do I find the custom feed builder? =
+
+The custom feed builder is available on any site of the network und the url `{site-url}\network-feed`.
+
 == Screenshots ==
 
 1. The settings section for each individual site if the site admins are allowed to decide for themselves whether they want to share their content or not.
-2. The settings page in the network admin area. Here every site can either be set to visible or hidden. The network admin can also decide, whether the site admins can make this choice on their own or not.
-3. Here the site categories can be managed.
+1. The settings page in the network admin area. Here every site can either be set to visible or hidden. The network admin can also decide, whether the site admins can make this choice on their own or not.
+1. Here the site categories can be managed.
+1. Excerpt of the custom feed builder.
 
 == Changelog ==
+
+= 2.0.6 =
+* Fixed some small bugs on the rss builder.
+* The rss feed of the shortcode now uses the permalink.
+* The feed builder now displays links to the sites.
 
 = 2.0.5 =
 * Fixed permalink structure in rss feed.

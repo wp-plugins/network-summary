@@ -67,3 +67,7 @@
     color: #D8000C;
     background-color: #FFBABA;
 }
+
+.site > a {
+    font-size: .9em;
+}

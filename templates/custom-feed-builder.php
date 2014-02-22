@@ -62,6 +62,8 @@ get_header(); ?>
 												   data-site="<?php echo $site_id; ?>"
 												/>
 											<?php echo get_blog_option( $site_id, 'blogname' ); ?>
+											<a href="<?php echo get_blog_option( $site_id, 'siteurl' ); ?>"
+											   target="_blank"><?php _e( '[ Visit ]', 'network-summary', 'network-summary' ); ?></a>
 										</label>
 									<?php endforeach; ?>
 								</div>
@@ -93,6 +95,8 @@ get_header(); ?>
 										   data-site="<?php echo $site_id; ?>"
 										/>
 									<?php echo get_blog_option( $site_id, 'blogname' ); ?>
+									<a href="<?php echo get_blog_option( $site_id, 'siteurl' ); ?>"
+									   target="_blank"><?php _e( '(Visit)', 'network-summary', 'network-summary' ); ?></a>
 								</label>
 							<?php endforeach; ?>
 						</div>
