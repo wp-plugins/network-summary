@@ -83,8 +83,8 @@ get_header(); ?>
 									<a class="select-all">
 										<?php _e( 'Select All', 'network-summary' ); ?>
 									</a>
-									<a class="deselect-all"">
-									<?php _e( 'Deselect All', 'network-summary' ); ?>
+									<a class="deselect-all">
+										<?php _e( 'Deselect All', 'network-summary' ); ?>
 									</a>
 								</div>
 							<?php endif; ?>
@@ -96,7 +96,7 @@ get_header(); ?>
 										/>
 									<?php echo get_blog_option( $site_id, 'blogname' ); ?>
 									<a href="<?php echo get_blog_option( $site_id, 'siteurl' ); ?>"
-									   target="_blank"><?php _e( '(Visit)', 'network-summary', 'network-summary' ); ?></a>
+									   target="_blank"><?php _e( '[ Visit ]', 'network-summary', 'network-summary' ); ?></a>
 								</label>
 							<?php endforeach; ?>
 						</div>
