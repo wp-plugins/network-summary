@@ -12,7 +12,7 @@ class Network_Summary
 	const site_option = 'network_summary';
 	const network_option = 'network_summary_network';
 	const version_option = 'network_summary_version';
-	const version = '2.0.6';
+	const version = '2.0.7';
 
 	private $site_categories;
 

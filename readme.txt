@@ -3,7 +3,7 @@ Contributors: jokr
 Tags: description, multisite, overview
 Requires at least: 3.5.2
 Tested up to: 3.8.1
-Stable tag: 2.0.6
+Stable tag: 2.0.7
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,10 @@ The custom feed builder is available on any site of the network und the url `{si
 1. Excerpt of the custom feed builder.
 
 == Changelog ==
+
+= 2.0.7 =
+* Small css changes on the shortcodes.
+* Fixed the brackets on the custom feed builder for sites without any category.
 
 = 2.0.6 =
 * Fixed some small bugs on the rss builder.
