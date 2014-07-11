@@ -1,0 +1,96 @@
+.netview-site {
+    width: 48%;
+    font-size: 0.9em;
+}
+
+.netview-site.even {
+    float: left;
+    clear: left;
+}
+
+.netview-site.odd {
+    float: right;
+    clear: right;
+}
+
+.netview-site .header-image img {
+    width: 100%;
+    border: 1px solid black;
+    margin-top: 10px;
+    max-height: 137px;
+}
+
+tr.site-info {
+    border-bottom: 1px dotted black;
+}
+
+#content table.netview-site p {
+    margin: 0;
+}
+
+#content table.netview-site, #content table.netview-site td {
+    border: 0;
+    padding: 0;
+}
+
+#content table.netview-site h2.site-title {
+    margin: 0 0 10px 0;
+    font-size: 1.3em;
+}
+
+#content table.netview-site tr td {
+    padding-top: 10px;
+}
+
+table.netview-site tr td:first-of-type {
+    width: 60%;
+}
+
+#content .netview-date {
+    margin-left: 5px;
+    font-size: .8em;
+    font-style: italic;
+}
+
+#content .netview-site h4 {
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+#content .netview-single h4 {
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+h2 a {
+    text-decoration: none;
+}
+
+.netview-single {
+    width: 100%;
+    display: block;
+    clear: both;
+}
+
+.netview-single img.featured-img {
+    display: inline-block;
+    float: left;
+    width: 20%;
+    margin: 0 10px .5em 0;
+    overflow: hidden;
+    border: 5px solid #add8e6;
+}
+
+.netview-single a:hover img {
+    border: 5px solid lightskyblue;
+}
+
+.netview-single .site-description {
+    display: inline-block;
+}
+
+.network-feed {
+    margin-left: 3px;
+    padding: 0 0 0 19px;
+    background: url("../img/feed-icon-14x14.png") no-repeat 0 50%;
+}
