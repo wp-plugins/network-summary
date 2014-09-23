@@ -1,7 +1,6 @@
 <?php
 
-abstract class Network_Summary_Shortcode
-{
+abstract class Network_Summary_Shortcode {
 	protected $args;
 	protected $args_hash;
 	protected $cached;
@@ -15,7 +14,7 @@ abstract class Network_Summary_Shortcode
 
 		$this->parse_and_validate_args( $atts );
 
-		$this->caching = $caching;
+		$this->caching   = $caching;
 		$this->args_hash = $this->get_hash();
 		if ( $caching AND $cache = get_transient( $this->get_transient_handle() . $this->args_hash ) ) {
 			$this->cached = true;
@@ -23,6 +22,19 @@ abstract class Network_Summary_Shortcode
 		} else {
 			$this->cached = false;
 		}
+	}
+
+	protected function parse_and_validate_args( $atts ) {
+		$this->parse_args( $atts );
+		$this->validate_args();
+	}
+
+	protected abstract function parse_args( $atts );
+
+	protected abstract function validate_args();
+
+	protected function get_hash() {
+		return md5( serialize( $this->args ) );
 	}
 
 	protected abstract function get_transient_handle();
@@ -43,16 +55,8 @@ abstract class Network_Summary_Shortcode
 		if ( $this->caching ) {
 			set_transient( 'netview_overview_' . $this->args_hash, $this->output, 7200 );
 		}
+
 		return $this->output;
-	}
-
-	protected function parse_and_validate_args( $atts ) {
-		$this->parse_args( $atts );
-		$this->validate_args();
-	}
-
-	protected function get_hash() {
-		return md5( serialize( $this->args ) );
 	}
 
 	protected function enqueue_styles() {
@@ -60,10 +64,6 @@ abstract class Network_Summary_Shortcode
 	}
 
 	protected abstract function generate_output();
-
-	protected abstract function parse_args( $atts );
-
-	protected abstract function validate_args();
 
 	protected function extract_boolVal( $var ) {
 		switch ( $var ) {
@@ -78,6 +78,7 @@ abstract class Network_Summary_Shortcode
 			default:
 				$out = false;
 		}
+
 		return $out;
 	}
 
@@ -87,11 +88,12 @@ abstract class Network_Summary_Shortcode
 		$recent_posts = wp_get_recent_posts( array( 'numberposts' => $number_of_posts, 'post_status' => 'publish' ) );
 		foreach ( $recent_posts as $post ) {
 			$result .= '<li><a href="' . get_permalink( $post["ID"] ) . '" title="Read ' . $post["post_title"] . '.">'
-				. $post["post_title"] . '</a><span class="netview-date">'
-				. date_i18n( $dateFormat, strtotime( $post["post_date"] ) )
-				. '</span></li>';
+			           . $post["post_title"] . '</a><span class="netview-date">'
+			           . date_i18n( $dateFormat, strtotime( $post["post_date"] ) )
+			           . '</span></li>';
 		}
 		$result .= '</ul>';
+
 		return $result;
 	}
 

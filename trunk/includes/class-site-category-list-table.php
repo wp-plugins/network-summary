@@ -2,8 +2,7 @@
 
 require_once dirname( __FILE__ ) . '/class-network-summary-list-table.php';
 
-class Site_Category_List_Table extends Network_Summary_List_Table
-{
+class Site_Category_List_Table extends Network_Summary_List_Table {
 	private $site_category_repository;
 
 	public function __construct( Site_Category_Repository $site_category_repository ) {
@@ -16,8 +15,8 @@ class Site_Category_List_Table extends Network_Summary_List_Table
 
 	protected function get_all_columns() {
 		return array(
-			'id' => __( 'ID', 'network-summary' ),
-			'name' => __( 'Name', 'network-summary' ),
+			'id'          => __( 'ID', 'network-summary' ),
+			'name'        => __( 'Name', 'network-summary' ),
 			'description' => __( 'Description', 'network-summary' )
 		);
 	}
@@ -33,21 +32,21 @@ class Site_Category_List_Table extends Network_Summary_List_Table
 	protected function column_name( $item ) {
 		$edit_url = add_query_arg(
 			array(
-				'page' => 'network-summary-categories',
+				'page'   => 'network-summary-categories',
 				'action' => 'edit',
-				'id' => $item->id
+				'id'     => $item->id
 			),
 			network_admin_url( 'settings.php' ) );
 
-		$title = sprintf( '<strong><a href="%1$s">%2$s</a></strong>',
+		$title      = sprintf( '<strong><a href="%1$s">%2$s</a></strong>',
 			$edit_url,
 			$item->name
 		);
 		$delete_url = add_query_arg(
 			array(
-				'page' => 'network-summary-categories',
-				'action' => 'delete',
-				'id' => $item->id,
+				'page'     => 'network-summary-categories',
+				'action'   => 'delete',
+				'id'       => $item->id,
 				'_wpnonce' => wp_create_nonce( 'delete_site_category' )
 			),
 			network_admin_url( 'settings.php' ) );

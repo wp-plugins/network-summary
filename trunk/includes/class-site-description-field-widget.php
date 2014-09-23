@@ -1,7 +1,6 @@
 <?php
 
-class Site_Description_Field_Widget extends WP_Widget
-{
+class Site_Description_Field_Widget extends WP_Widget {
 	private $plugin;
 
 	public function __construct() {
@@ -35,16 +34,17 @@ class Site_Description_Field_Widget extends WP_Widget
 		<p>
 			<label for="<?php echo $this->get_field_name( 'title' ); ?>"><?php _e( 'Title:' ); ?>
 				<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>"
-					   name="<?php echo $this->get_field_name( 'title' ); ?>" type="text"
-					   value="<?php echo esc_attr( $title ); ?>"/>
+				       name="<?php echo $this->get_field_name( 'title' ); ?>" type="text"
+				       value="<?php echo esc_attr( $title ); ?>"/>
 			</label>
 		</p>
 	<?php
 	}
 
 	public function update( $new_instance, $old_instance ) {
-		$instance = array();
+		$instance          = array();
 		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+
 		return $instance;
 	}
 }

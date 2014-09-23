@@ -2,8 +2,8 @@
 Contributors: jokr
 Tags: description, multisite, overview
 Requires at least: 3.5.2
-Tested up to: 3.9.1
-Stable tag: 2.0.8
+Tested up to: 4.0.0
+Stable tag: 2.0.9
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,7 +29,7 @@ Options:
 
 * `include` (optional, defaults: all available) expects a comma separated list of site ids. It will only will list these sites.
 * `exclude` (optional) expects a comma separated list of site ids. It will list all sites except the listed ones.
-* `category` (optional) expects a comma seperated list of category ids. Only sites within these categories will be displayed, regardless of the include parameter. The exclude parameter will still apply.
+* `category` (optional) expects a comma separated list of category ids. Only sites within these categories will be displayed, regardless of the include parameter. The exclude parameter will still apply.
 * `numposts` (optional, default: 2) expects a positive number or zero. Limits the number of most recent published posts displayed.
 * `sort` (optional, default: 'abc') expects either 'abc' or 'posts'. 'abc' means alphabetical sorting. 'posts' will sort the sites according to their most recent post.
 * `layout` (optional, default: 'table') expects either 'grid' or 'table'. Defines the layout of the list. Grid uses two columns. Table uses one row per site.
@@ -78,6 +78,10 @@ The custom feed builder is available on any site of the network und the url `{si
 1. Excerpt of the custom feed builder.
 
 == Changelog ==
+
+= 2.0.9 =
+* General reformatting to comply with WordPress guidelines.
+* Update TinyMCE call to be compatible with TinyMCE 4.0.
 
 = 2.0.8 =
 * Tested compatibility with WordPress Core 3.9.1.

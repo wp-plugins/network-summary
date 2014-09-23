@@ -2,14 +2,13 @@
 
 require_once dirname( __FILE__ ) . '/class-network-summary-list-table.php';
 
-class Sites_List_Table extends Network_Summary_List_Table
-{
+class Sites_List_Table extends Network_Summary_List_Table {
 	private $network_summary;
 	private $admin;
 
 	public function __construct( Network_Summary $network_Summary, Network_Summary_Admin $admin ) {
 		$this->network_summary = $network_Summary;
-		$this->admin = $admin;
+		$this->admin           = $admin;
 	}
 
 	protected function get_items() {
@@ -18,14 +17,14 @@ class Sites_List_Table extends Network_Summary_List_Table
 			switch_to_blog( $site_id );
 			$option = get_option( Network_Summary::site_option );
 			array_push( $items, array(
-				'id' => $site_id,
-				'name' => get_bloginfo( 'bloginfo' ),
-				'categories' => get_site_categories( $site_id ),
-				'sharing' => $option['share_site'],
+				'id'          => $site_id,
+				'name'        => get_bloginfo( 'bloginfo' ),
+				'categories'  => get_site_categories( $site_id ),
+				'sharing'     => $option['share_site'],
 				'description' => $option['site_description'],
-				'no_posts' => wp_count_posts()->publish,
-				'no_pages' => wp_count_posts( 'page' )->publish,
-				'last_post' => wp_get_recent_posts( array(
+				'no_posts'    => wp_count_posts()->publish,
+				'no_pages'    => wp_count_posts( 'page' )->publish,
+				'last_post'   => wp_get_recent_posts( array(
 					'numberposts' => 1,
 					'post_status' => 'publish'
 				), 'OBJECT' )
@@ -43,24 +42,25 @@ class Sites_List_Table extends Network_Summary_List_Table
 
 	protected function get_all_columns() {
 		return array(
-			'id' => __( 'ID', 'network-summary' ),
-			'name' => __( 'Site Name', 'network-summary' ),
-			'categories' => __( 'Categories', 'network-summary' ),
-			'sharing' => __( 'Sharing', 'network-summary' ),
+			'id'          => __( 'ID', 'network-summary' ),
+			'name'        => __( 'Site Name', 'network-summary' ),
+			'categories'  => __( 'Categories', 'network-summary' ),
+			'sharing'     => __( 'Sharing', 'network-summary' ),
 			'description' => __( 'Site Description', 'network-summary' ),
-			'no_posts' => __( '# Posts', 'network-summary' ),
-			'no_pages' => __( '# Pages', 'network-summary' ),
-			'last_post' => __( 'Last Post', 'network-summary' )
+			'no_posts'    => __( '# Posts', 'network-summary' ),
+			'no_pages'    => __( '# Pages', 'network-summary' ),
+			'last_post'   => __( 'Last Post', 'network-summary' )
 		);
 	}
 
 	protected function get_column_widths() {
 		return array(
-			'id' => '2%',
-			'name' => '15%',
-			'categories' => '15%',
-			'description' => '25%',
-			'last_post' => '25%'
+			'id'          => '5%',
+			'name'        => '15%',
+			'categories'  => '15%',
+			'sharing'     => '15%',
+			'description' => '20%',
+			'last_post'   => '20%'
 		);
 	}
 
@@ -93,6 +93,7 @@ class Sites_List_Table extends Network_Summary_List_Table
 	protected function column_last_post( $item ) {
 		if ( ! empty( $item['last_post'] ) ) {
 			$post = $item['last_post'][0];
+
 			return sprintf( '<a href="%s">%s</a><br> on %s by %s',
 				get_permalink( $post->ID ),
 				$post->post_title,

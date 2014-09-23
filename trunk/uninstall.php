@@ -1,6 +1,7 @@
 <?php
-if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) )
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit();
+}
 
 require_once dirname( __FILE__ ) . '/includes/class-network-summary.php';
 

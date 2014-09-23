@@ -26,6 +26,7 @@ if ( class_exists( 'Network_Summary' ) ) {
 			$id = get_current_blog_id();
 		}
 		global $network_summary;
+
 		return $network_summary->get_site_categories( $id );
 	}
 
@@ -44,6 +45,7 @@ if ( class_exists( 'Network_Summary' ) ) {
 			$id = get_current_blog_id();
 		}
 		$option = get_blog_option( $id, Network_Summary::site_option );
+
 		return $option['share_site'];
 	}
 
@@ -52,6 +54,7 @@ if ( class_exists( 'Network_Summary' ) ) {
 			$id = get_current_blog_id();
 		}
 		$option = get_blog_option( $id, Network_Summary::site_option );
+
 		return $option['site_description'];
 	}
 }

@@ -4,8 +4,8 @@
     padding: 5px;
     font-family: Consolas, Monaco, 'Courier New', monospace;
     font-size: .8em;
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
 

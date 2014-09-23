@@ -40,7 +40,7 @@ get_header(); ?>
 								<div class="select-category">
 									<label>
 										<input type="checkbox" class="category-checkbox"
-											   data-category="<?php echo $category_id; ?>">
+										       data-category="<?php echo $category_id; ?>">
 										<?php _e( 'Subscribe to all sites in this category (including any new sites)', 'network-summary' ); ?>
 									</label>
 								</div>
@@ -59,7 +59,7 @@ get_header(); ?>
 									foreach ( $sites as $site_id ) : ?>
 										<label class="site">
 											<input type="checkbox" class="site-checkbox"
-												   data-site="<?php echo $site_id; ?>"
+											       data-site="<?php echo $site_id; ?>"
 												/>
 											<?php echo get_blog_option( $site_id, 'blogname' ); ?>
 											<a href="<?php echo get_blog_option( $site_id, 'siteurl' ); ?>"
@@ -92,7 +92,7 @@ get_header(); ?>
 							foreach ( $sites as $site_id ) : ?>
 								<label class="site">
 									<input type="checkbox" class="site-checkbox"
-										   data-site="<?php echo $site_id; ?>"
+									       data-site="<?php echo $site_id; ?>"
 										/>
 									<?php echo get_blog_option( $site_id, 'blogname' ); ?>
 									<a href="<?php echo get_blog_option( $site_id, 'siteurl' ); ?>"
@@ -111,8 +111,8 @@ get_header(); ?>
 				<label>
 					<?php _e( 'Use this url in your rss feed reader:', 'network-summary' ); ?>
 					<input type="text" id="custom-feed-input" onclick="jQuery(this).select();"
-						   data-base-url="<?php echo get_feed_link( 'rss2-network' ); ?>"
-						   value="<?php echo get_feed_link( 'rss2-network' ); ?>"/>
+					       data-base-url="<?php echo get_feed_link( 'rss2-network' ); ?>"
+					       value="<?php echo get_feed_link( 'rss2-network' ); ?>"/>
 				</label>
 				<input id="custom-feed-reset" type="button" value="Reset" class="pure-button"/>
 			</div>

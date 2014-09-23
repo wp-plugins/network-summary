@@ -2,18 +2,19 @@
 
 require_once dirname( __FILE__ ) . '/class-network-summary-shortcode.php';
 
-class Network_Single_Shortcode extends Network_Summary_Shortcode
-{
+class Network_Single_Shortcode extends Network_Summary_Shortcode {
 	/**
 	 * Displays one specific site in a featured way with an image.
 	 *
 	 * @param $atts array with a required id of the site to display and a url to a image for the site. Also accepts a
 	 * numposts parameter for the number of recent posts displayed. Can be 0 and defaults to 2.
+	 *
 	 * @return string html content for single view.
 	 */
 	public static function render( $atts ) {
 		global $network_summary;
 		$code = new Network_Single_Shortcode( $network_summary, $atts, false );
+
 		return $code->output();
 	}
 
@@ -47,8 +48,8 @@ class Network_Single_Shortcode extends Network_Summary_Shortcode
 
 	protected function parse_args( $atts ) {
 		$this->args = shortcode_atts( array(
-			'id' => 'error',
-			'img' => '',
+			'id'       => 'error',
+			'img'      => '',
 			'numposts' => 2
 		), $atts, 'netview-single' );
 	}
