@@ -1,12 +1,11 @@
 <?php
 
-class Site_Category_Repository
-{
+class Site_Category_Repository {
 	public function __construct() {
 		global $wpdb;
-		$table_name = $wpdb->base_prefix . 'site_categories';
-		$wpdb->site_categories = $table_name;
-		$table_name = $wpdb->base_prefix . 'site_categories_relationships';
+		$table_name                          = $wpdb->base_prefix . 'site_categories';
+		$wpdb->site_categories               = $table_name;
+		$table_name                          = $wpdb->base_prefix . 'site_categories_relationships';
 		$wpdb->site_categories_relationships = $table_name;
 	}
 
@@ -48,31 +47,37 @@ class Site_Category_Repository
 
 	public function get_all() {
 		global $wpdb;
+
 		return $wpdb->get_results( "SELECT id, name, description FROM $wpdb->site_categories", OBJECT_K );
 	}
 
 	public function add( array $category ) {
 		global $wpdb;
+
 		return $wpdb->insert( $wpdb->site_categories, $category );
 	}
 
 	public function delete( $id ) {
 		global $wpdb;
+
 		return $wpdb->delete( $wpdb->site_categories, array( 'id' => $id ) );
 	}
 
 	public function get_by_id( $id ) {
 		global $wpdb;
+
 		return $wpdb->get_row( "SELECT id, name, description FROM $wpdb->site_categories where id = $id", OBJECT );
 	}
 
 	public function update( $id, array $category ) {
 		global $wpdb;
+
 		return $wpdb->update( $wpdb->site_categories, $category, array( 'id' => $id ) );
 	}
 
 	public function get_by_site( $site_id ) {
 		global $wpdb;
+
 		return $wpdb->get_results(
 			"SELECT cat.id, cat.name, cat.description
 			 FROM $wpdb->site_categories cat
@@ -83,11 +88,17 @@ class Site_Category_Repository
 
 	public function set_site_category( $site, $category ) {
 		global $wpdb;
-		return $wpdb->replace( $wpdb->site_categories_relationships, array( 'blog_id' => $site, 'category_id' => $category ) );
+
+		return $wpdb->replace( $wpdb->site_categories_relationships, array( 'blog_id'     => $site,
+		                                                                    'category_id' => $category
+			) );
 	}
 
 	public function remove_site_category( $site, $category ) {
 		global $wpdb;
-		return $wpdb->delete( $wpdb->site_categories_relationships, array( 'blog_id' => $site, 'category_id' => $category ) );
+
+		return $wpdb->delete( $wpdb->site_categories_relationships, array( 'blog_id'     => $site,
+		                                                                   'category_id' => $category
+			) );
 	}
 }

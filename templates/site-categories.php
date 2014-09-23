@@ -39,15 +39,15 @@ if ( isset( $categories_table ) ) :
 						<h3><?php _e( 'Add new site category', 'network-summary' ) ?></h3>
 
 						<form id="add-site-category" method="post"
-							  action="<?php echo admin_url( 'admin-post.php' ); ?>"
-							  class="validate">
+						      action="<?php echo admin_url( 'admin-post.php' ); ?>"
+						      class="validate">
 							<input type="hidden" name="action" value="add_site_category"/>
 							<?php wp_nonce_field( 'add-site-category', '_wpnonce_add_site_category' ); ?>
 
 							<div class="form-field form-required">
 								<label for="category-name"><?php _e( 'Name', 'network-summary' ); ?></label>
 								<input name="site-category[name]" id="site-category-name" type="text" value="" size="40"
-									   required="true"/>
+								       required="true"/>
 
 								<p class="description"><?php _e( 'The name is how it appears on your site.', 'network-summary' ); ?></p>
 							</div>
@@ -56,7 +56,7 @@ if ( isset( $categories_table ) ) :
 								<label
 									for="category-description"><?php _e( 'Description', 'network-summary' ); ?></label>
 								<textarea name="site-category[description]" id="category-description" rows="5"
-										  cols="40"></textarea>
+								          cols="40"></textarea>
 
 								<p><?php _e( 'The description can be shown by some shortcodes.', 'network-summary' ); ?></p>
 							</div>

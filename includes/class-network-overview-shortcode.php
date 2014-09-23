@@ -2,9 +2,22 @@
 
 require_once dirname( __FILE__ ) . '/class-network-summary-shortcode.php';
 
-class Network_Overview_Shortcode extends Network_Summary_Shortcode
-{
+class Network_Overview_Shortcode extends Network_Summary_Shortcode {
 	private $sites;
+
+	public function __construct( Network_Summary $network_summary, $atts, $cache = true ) {
+		parent::__construct( $network_summary, $atts, $cache );
+		$this->sort_sites();
+	}
+
+	private function sort_sites() {
+		$sorting = $this->args['sort'];
+		if ( 'abc' == $sorting ) {
+			@usort( $this->sites, array( $this, 'sort_sites_by_name' ) );
+		} else if ( 'posts' == $sorting ) {
+			@usort( $this->sites, 'sort_sites_by_recent_post' );
+		}
+	}
 
 	/**
 	 * Displays a overview of all sites in a two column display in alphabetic order.
@@ -15,17 +28,14 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 	 * parameter can be either 'abc' or 'posts'. 'abc' is the default value and sorts the posts alphabetically. 'posts'
 	 * sorts the sites so that the one with the most recent posts are listed first. Finally it takes a layout parameter
 	 * which takes either 'grid' (default) or 'table' and displays the sites accordingly.
+	 *
 	 * @return string the html content for the overview view.
 	 */
 	public static function render( $atts ) {
 		global $network_summary;
 		$code = new Network_Overview_Shortcode( $network_summary, $atts, false );
-		return $code->output();
-	}
 
-	public function __construct( Network_Summary $network_summary, $atts, $cache = true ) {
-		parent::__construct( $network_summary, $atts, $cache );
-		$this->sort_sites();
+		return $code->output();
 	}
 
 	protected function get_transient_handle() {
@@ -35,13 +45,13 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 	protected function parse_args( $atts ) {
 		$args = shortcode_atts( array(
 			'category' => array(),
-			'include' => array(),
-			'exclude' => array(),
+			'include'  => array(),
+			'exclude'  => array(),
 			'numposts' => 2,
-			'sort' => 'abc',
-			'layout' => 'table',
-			'images' => 'true',
-			'rss' => 'true',
+			'sort'     => 'abc',
+			'layout'   => 'table',
+			'images'   => 'true',
+			'rss'      => 'true',
 			'minposts' => 0,
 		), $atts, 'netview' );;
 
@@ -110,7 +120,7 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 		}
 
 		$this->args['images'] = $this->extract_boolVal( $this->args['images'] );
-		$this->args['rss'] = $this->extract_boolVal( $this->args['rss'] );
+		$this->args['rss']    = $this->extract_boolVal( $this->args['rss'] );
 
 		if ( ! is_numeric( $this->args['minposts'] ) || $this->args['minposts'] < 0 ) {
 			array_push(
@@ -161,7 +171,7 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 			foreach ( $this->sites as $site_id ) {
 				$date_format = get_option( 'date_format' );
 				switch_to_blog( $site_id );
-				$name = '<h2 class="site-title"><a href="' . site_url() . '">' . get_bloginfo() . '</a></h2>';
+				$name        = '<h2 class="site-title"><a href="' . site_url() . '">' . get_bloginfo() . '</a></h2>';
 				$description = wpautop( do_shortcode( site_description() ) );
 				if ( $images && get_header_image() ) {
 					$picture = '<a href="' . site_url() . '"><img src="' . get_header_image() . '"></a>';
@@ -200,16 +210,8 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 
 		}
 		$result .= '</div>';
-		return $result;
-	}
 
-	private function sort_sites() {
-		$sorting = $this->args['sort'];
-		if ( 'abc' == $sorting ) {
-			@usort( $this->sites, array( $this, 'sort_sites_by_name' ) );
-		} else if ( 'posts' == $sorting ) {
-			@usort( $this->sites, 'sort_sites_by_recent_post' );
-		}
+		return $result;
 	}
 
 	private function get_rss2_url() {
@@ -223,14 +225,16 @@ class Network_Overview_Shortcode extends Network_Summary_Shortcode
 		} elseif ( ! empty( $this->args['include'] ) || ! empty( $this->args['exclude'] ) ) {
 			$query['sites'] = $this->sites;
 		}
-		$url = trailingslashit( get_feed_link('rss2-network') );
-		return empty($query) ? $url : $url . '?' . http_build_query( $query );
+		$url = trailingslashit( get_feed_link( 'rss2-network' ) );
+
+		return empty( $query ) ? $url : $url . '?' . http_build_query( $query );
 	}
 }
 
 function sort_sites_by_recent_post( $site_a, $site_b ) {
 	$post_a = get_most_recent_post( $site_a );
 	$post_b = get_most_recent_post( $site_b );
+
 	return strcmp( $post_b['post_date'], $post_a['post_date'] );
 }
 
@@ -242,5 +246,6 @@ function get_most_recent_post( $blog_id ) {
 		$result = $recent[0];
 	}
 	restore_current_blog();
+
 	return $result;
 }

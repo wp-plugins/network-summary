@@ -2,18 +2,19 @@
 
 require_once dirname( __FILE__ ) . '/class-network-summary-shortcode.php';
 
-class Network_All_Shortcode extends Network_Summary_Shortcode
-{
+class Network_All_Shortcode extends Network_Summary_Shortcode {
 
 	/**
 	 * Displays a index of all available sites in an alphabetic order.
 	 *
 	 * @param $atts array with a title attribute displayed before the list.
+	 *
 	 * @return string html content
 	 */
 	public static function render( $atts ) {
 		global $network_summary;
 		$code = new Network_All_Shortcode( $network_summary, $atts, false );
+
 		return $code->output();
 	}
 
@@ -39,6 +40,7 @@ class Network_All_Shortcode extends Network_Summary_Shortcode
 			restore_current_blog();
 		}
 		$result .= '</ul></div>';
+
 		return $title . $result;
 	}
 

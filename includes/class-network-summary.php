@@ -7,8 +7,7 @@ require_once plugin_dir_path( __FILE__ ) . 'class-network-all-shortcode.php';
 require_once plugin_dir_path( __FILE__ ) . 'class-site-category-repository.php';
 require_once plugin_dir_path( __FILE__ ) . 'class-custom-feed-builder-page.php';
 
-class Network_Summary
-{
+class Network_Summary {
 	const site_option = 'network_summary';
 	const network_option = 'network_summary_network';
 	const version_option = 'network_summary_version';
@@ -54,10 +53,27 @@ class Network_Summary
 		$this->site_categories->create_table();
 	}
 
+	/**
+	 * Returns a list of all sites as an array of blog ids. Saves it as a transient.
+	 *
+	 * @param int $expires Time until expiration of transient in seconds, default 7200
+	 *
+	 * @return array list of blog ids
+	 */
+	public function get_sites( $expires = 7200 ) {
+		if ( false === ( $site_list = get_transient( 'network_summary_site_list' ) ) ) {
+			global $wpdb;
+			$site_list = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs ORDER BY domain ASC" );
+			set_site_transient( 'network_summary_site_list', $site_list, $expires );
+		}
+
+		return $site_list;
+	}
+
 	public function get_default_site_values() {
 		return array(
-			'share_site' => false,
-			'site_description' => '',
+			'share_site'            => false,
+			'site_description'      => '',
 			'flushed_rewrite_rules' => false
 		);
 	}
@@ -65,7 +81,7 @@ class Network_Summary
 	public function get_default_network_values() {
 		return array(
 			'deciding_role' => 'network_admin',
-			'rss_limit' => 50
+			'rss_limit'     => 50
 		);
 	}
 
@@ -92,7 +108,7 @@ class Network_Summary
 			case '2.0.1':
 			case '2.0.2':
 				foreach ( $this->get_sites() as $site_id ) {
-					$option = get_blog_option( $site_id, Network_Summary::site_option );
+					$option               = get_blog_option( $site_id, Network_Summary::site_option );
 					$option['share_site'] = $option['share_site'] == 1;
 					update_blog_option( $site_id, Network_Summary::site_option, $option );
 				}
@@ -109,7 +125,7 @@ class Network_Summary
 				$wpdb->query( "ALTER TABLE $wpdb->site_categories_relationships ENGINE=$engine" );
 			case '2.0.4':
 				foreach ( $this->get_sites() as $site_id ) {
-					$option = get_blog_option( $site_id, Network_Summary::site_option );
+					$option                          = get_blog_option( $site_id, Network_Summary::site_option );
 					$option['flushed_rewrite_rules'] = false;
 					update_blog_option( $site_id, Network_Summary::site_option, $option );
 				}
@@ -122,12 +138,14 @@ class Network_Summary
 
 	/**
 	 * Hook executed when a new site is created.
+	 *
 	 * @param $site_id int id of the new site.
 	 */
 	public function add_new_site( $site_id ) {
 		add_blog_option( $site_id, Network_Summary::site_option, array(
-				'share_site' => '0',
-				'site_description' => '' )
+				'share_site'       => '0',
+				'site_description' => ''
+			)
 		);
 	}
 
@@ -166,21 +184,6 @@ class Network_Summary
 		}
 	}
 
-	/**
-	 * Returns a list of all sites as an array of blog ids. Saves it as a transient.
-	 *
-	 * @param int $expires Time until expiration of transient in seconds, default 7200
-	 * @return array list of blog ids
-	 */
-	public function get_sites( $expires = 7200 ) {
-		if ( false === ( $site_list = get_transient( 'network_summary_site_list' ) ) ) {
-			global $wpdb;
-			$site_list = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs ORDER BY domain ASC" );
-			set_site_transient( 'network_summary_site_list', $site_list, $expires );
-		}
-		return $site_list;
-	}
-
 	public function get_sites_per_category( $category_id, $show_only_shared = false ) {
 		global $wpdb;
 		$result = $wpdb->get_col(
@@ -192,7 +195,23 @@ class Network_Summary
 		if ( $show_only_shared ) {
 			$result = array_intersect( $result, $this->get_shared_sites() );
 		}
+
 		return $result;
+	}
+
+	public function get_shared_sites( $minposts = 0 ) {
+		$shared_sites = array();
+		$site_list    = $this->get_sites();
+		foreach ( $site_list as $site_id ) {
+			switch_to_blog( $site_id );
+			$count_posts = wp_count_posts()->publish;
+			if ( share_site( $site_id ) && $count_posts >= $minposts ) {
+				array_push( $shared_sites, $site_id );
+			}
+			restore_current_blog();
+		}
+
+		return $shared_sites;
 	}
 
 	public function get_sites_without_category( $show_only_shared = false ) {
@@ -208,21 +227,8 @@ class Network_Summary
 		if ( $show_only_shared ) {
 			$result = array_intersect( $result, $this->get_shared_sites() );
 		}
-		return $result;
-	}
 
-	public function get_shared_sites( $minposts = 0 ) {
-		$shared_sites = array();
-		$site_list = $this->get_sites();
-		foreach ( $site_list as $site_id ) {
-			switch_to_blog( $site_id );
-			$count_posts = wp_count_posts()->publish;
-			if ( share_site( $site_id ) && $count_posts >= $minposts ) {
-				array_push( $shared_sites, $site_id );
-			}
-			restore_current_blog();
-		}
-		return $shared_sites;
+		return $result;
 	}
 
 	public function get_all_categories() {

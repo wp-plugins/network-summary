@@ -5,14 +5,13 @@
  *
  * @License: GPL 2+
  */
-class Custom_Feed_Builder_Page
-{
+class Custom_Feed_Builder_Page {
 	private $url;
 	private $pagename;
 	private $template;
 
 	public function __construct( $url, $pagename, $template ) {
-		$this->url = $url;
+		$this->url      = $url;
 		$this->pagename = $pagename;
 		$this->template = $template;
 
@@ -27,6 +26,7 @@ class Custom_Feed_Builder_Page
 
 	public function page_query_vars( $qvars ) {
 		$qvars[] = 'custom_page';
+
 		return $qvars;
 	}
 
@@ -38,6 +38,7 @@ class Custom_Feed_Builder_Page
 				return $this->template;
 			}
 		}
+
 		return $template;
 	}
 

@@ -1,7 +1,6 @@
 <?php
 
-abstract class Network_Summary_List_Table
-{
+abstract class Network_Summary_List_Table {
 	protected $items;
 
 	public function prepare_items() {
@@ -9,37 +8,6 @@ abstract class Network_Summary_List_Table
 	}
 
 	protected abstract function get_items();
-
-	public function has_items() {
-		return ! empty( $this->items );
-	}
-
-	public function no_items() {
-		_e( 'No items found.' );
-	}
-
-	protected abstract function get_all_columns();
-
-	protected function get_hidden_columns() {
-		return array();
-	}
-
-	protected function get_column_widths() {
-		return array();
-	}
-
-	private function get_column_info() {
-		return array(
-			$this->get_all_columns(),
-			$this->get_hidden_columns(),
-			$this->get_column_widths() );
-	}
-
-	private function get_column_count() {
-		list ( $columns, $hidden ) = $this->get_column_info();
-		$hidden = array_intersect( array_keys( $columns ), array_filter( $hidden ) );
-		return count( $columns ) - count( $hidden );
-	}
 
 	public function display() {
 		$this->display_tablenav( 'top' );
@@ -66,6 +34,18 @@ abstract class Network_Summary_List_Table
 		$this->display_tablenav( 'bottom' );
 	}
 
+	protected function display_tablenav( $which ) {
+		?>
+		<div class="tablenav <?php echo esc_attr( $which ); ?>">
+			<br class="clear"/>
+		</div>
+	<?php
+	}
+
+	private function get_table_classes() {
+		return array( 'widefat', 'fixed' );
+	}
+
 	private function print_column_headers( $with_id = true ) {
 		list( $columns, $hidden, $widths ) = $this->get_column_info();
 
@@ -75,8 +55,8 @@ abstract class Network_Summary_List_Table
 			$style = '';
 			if ( in_array( $column_key, $hidden ) ) {
 				$style = 'display:none;';
-			} else if ( isset( $widths[$column_key] ) ) {
-				$style = 'width:' . $widths[$column_key];
+			} else if ( isset( $widths[ $column_key ] ) ) {
+				$style = 'width:' . $widths[ $column_key ];
 			}
 
 			if ( strlen( $style ) > 0 ) {
@@ -93,18 +73,6 @@ abstract class Network_Summary_List_Table
 		}
 	}
 
-	private function get_table_classes() {
-		return array( 'widefat', 'fixed' );
-	}
-
-	protected function display_tablenav( $which ) {
-		?>
-		<div class="tablenav <?php echo esc_attr( $which ); ?>">
-			<br class="clear"/>
-		</div>
-	<?php
-	}
-
 	private function display_rows_or_placeholder() {
 		if ( $this->has_items() ) {
 			$this->display_rows();
@@ -113,6 +81,10 @@ abstract class Network_Summary_List_Table
 			$this->no_items();
 			echo '</td></tr>';
 		}
+	}
+
+	public function has_items() {
+		return ! empty( $this->items );
 	}
 
 	private function display_rows() {
@@ -137,8 +109,9 @@ abstract class Network_Summary_List_Table
 			$class = "class='$column_name column-$column_name'";
 
 			$style = '';
-			if ( in_array( $column_name, $hidden ) )
+			if ( in_array( $column_name, $hidden ) ) {
 				$style = ' style="display:none;"';
+			}
 
 			$attributes = "$class$style";
 
@@ -153,10 +126,39 @@ abstract class Network_Summary_List_Table
 			return call_user_func( array( $item, 'get' . ucfirst( $column_name ) ), $item );
 		} elseif ( is_object( $item ) && property_exists( $item, $column_name ) ) {
 			return $item->$column_name;
-		} elseif ( is_array( $item ) && isset( $item[$column_name] ) ) {
-			return $item[$column_name];
+		} elseif ( is_array( $item ) && isset( $item[ $column_name ] ) ) {
+			return $item[ $column_name ];
 		} else {
 			return '';
 		}
+	}
+
+	private function get_column_count() {
+		list ( $columns, $hidden ) = $this->get_column_info();
+		$hidden = array_intersect( array_keys( $columns ), array_filter( $hidden ) );
+
+		return count( $columns ) - count( $hidden );
+	}
+
+	private function get_column_info() {
+		return array(
+			$this->get_all_columns(),
+			$this->get_hidden_columns(),
+			$this->get_column_widths()
+		);
+	}
+
+	protected abstract function get_all_columns();
+
+	protected function get_hidden_columns() {
+		return array();
+	}
+
+	protected function get_column_widths() {
+		return array();
+	}
+
+	public function no_items() {
+		_e( 'No items found.' );
 	}
 }
