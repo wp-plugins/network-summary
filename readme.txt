@@ -2,8 +2,8 @@
 Contributors: jokr
 Tags: description, multisite, overview
 Requires at least: 3.5.2
-Tested up to: 4.0.0
-Stable tag: 2.0.9
+Tested up to: 4.1.0
+Stable tag: 2.0.10
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ The custom feed builder is available on any site of the network und the url `{si
 1. Excerpt of the custom feed builder.
 
 == Changelog ==
+
+= 2.0.10 =
+* Fixed a bug with the rss feed.
 
 = 2.0.9 =
 * General reformatting to comply with WordPress guidelines.
