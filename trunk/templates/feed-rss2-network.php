@@ -26,6 +26,8 @@ if ( empty( $sites ) ) {
 	$sites = $network_summary->get_sites();
 }
 
+$posts = $network_summary->get_posts_for_sites($sites);
+
 header( 'Content-Type: ' . feed_content_type( 'rss-http' ) . '; charset=' . get_option( 'blog_charset' ), true );
 $more = 1;
 
@@ -90,35 +92,6 @@ echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>
 		 * @since 2.0.0
 		 */
 		do_action( 'rss2_head' );
-
-		/*
-		 * Fetches all the posts.
-		 */
-		$posts = array();
-		foreach ( $sites as $site_id ) {
-			if ( share_site( $site_id ) ) {
-				switch_to_blog( $site_id );
-				$query = new WP_Query();
-				foreach ( $query->get_posts() as $post ) {
-					$post->site_id = $site_id;
-					array_push( $posts, $post );
-				}
-				restore_current_blog();
-			}
-		}
-
-		/*
-		 * Sort the posts.
-		 */
-		function sort_by_post_date( $a, $b ) {
-			return strtotime( $b->post_date_gmt ) - strtotime( $a->post_date_gmt );
-		}
-
-		usort( $posts, 'sort_by_post_date' );
-
-		$limit = get_site_option( Network_Summary::network_option );
-		$limit = $limit['rss_limit'];
-		$posts = array_slice( $posts, 0, $limit );
 
 		/*
 		 * Outputs all the posts.

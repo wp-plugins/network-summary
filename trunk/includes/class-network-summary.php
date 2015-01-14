@@ -70,6 +70,39 @@ class Network_Summary {
 		return $site_list;
 	}
 
+	public function get_posts_for_sites( array $sites ) {
+		if ( empty( $sites ) ) {
+			return;
+		}
+
+		$limit = get_site_option( Network_Summary::network_option );
+		$limit = $limit['rss_limit'];
+
+		global $wpdb;
+
+		$result = array();
+
+		function sort_by_post_date( $a, $b ) {
+			return strtotime( $b->post_date_gmt ) - strtotime( $a->post_date_gmt );
+		}
+
+		foreach ( $sites as $site_id ) {
+			if(share_site($site_id)) {
+				switch_to_blog( $site_id );
+				foreach ( get_posts() as $post ) {
+					$post->site_id = $site_id;
+					array_push( $result, $post );
+				}
+				restore_current_blog();
+
+				usort( $result, 'sort_by_post_date' );
+				$result = array_slice( $result, 0, $limit );
+			}
+		}
+
+		return $result;
+	}
+
 	public function get_default_site_values() {
 		return array(
 			'share_site'            => false,
