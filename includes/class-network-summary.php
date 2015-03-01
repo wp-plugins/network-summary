@@ -71,16 +71,14 @@ class Network_Summary {
 	}
 
 	public function get_posts_for_sites( array $sites ) {
+		$result = array();
+
 		if ( empty( $sites ) ) {
-			return;
+			return $result;
 		}
 
 		$limit = get_site_option( Network_Summary::network_option );
 		$limit = $limit['rss_limit'];
-
-		global $wpdb;
-
-		$result = array();
 
 		function sort_by_post_date( $a, $b ) {
 			return strtotime( $b->post_date_gmt ) - strtotime( $a->post_date_gmt );
@@ -162,6 +160,13 @@ class Network_Summary {
 					$option['flushed_rewrite_rules'] = false;
 					update_blog_option( $site_id, Network_Summary::site_option, $option );
 				}
+			case '2.0.6':
+			case '2.0.7':
+			case '2.0.8':
+			case '2.0.9':
+			case '2.0.10':
+			case '2.0.11':
+				break; // do nothing
 		}
 
 		if ( $old_version !== Network_Summary::version ) {

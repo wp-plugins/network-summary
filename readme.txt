@@ -2,8 +2,8 @@
 Contributors: jokr
 Tags: description, multisite, overview
 Requires at least: 3.5.2
-Tested up to: 4.1.0
-Stable tag: 2.0.10
+Tested up to: 4.1.1
+Stable tag: 2.0.11
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +36,7 @@ Options:
 * `images` (optional, default: 'true') expects either 'true' or 'false'. Defines whether header images of the sites are displayed if available.
 * `rss` (optional, default: 'true') expects either 'true' or 'false'. Defines whether a custom rss feed link should be displayed.
 * `minposts` (optional, default: 0) expects a positive number or zero. Defines a limit of posts a site must have published in order to be shown.
+* `post_types` (optional) additional post_types that are taken into consideration and displayed, type 'post' is always included.
 
 Example:
 
@@ -78,6 +79,9 @@ The custom feed builder is available on any site of the network und the url `{si
 1. Excerpt of the custom feed builder.
 
 == Changelog ==
+
+= 2.0.11 =
+* Added option to include new post types to netview shortcode (e.g. podcasts).
 
 = 2.0.10 =
 * Fixed a bug with the rss feed.

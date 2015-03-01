@@ -82,10 +82,18 @@ abstract class Network_Summary_Shortcode {
 		return $out;
 	}
 
-	protected function get_recent_posts( $number_of_posts, $dateFormat ) {
+	protected function get_recent_posts( $number_of_posts, $post_types, $dateFormat ) {
 		$result = '<ul class="site-recent-post">';
 
-		$recent_posts = wp_get_recent_posts( array( 'numberposts' => $number_of_posts, 'post_status' => 'publish' ) );
+		$recent_posts = array();
+		foreach($post_types as $post_type) {
+			$recent_posts = array_merge($recent_posts, wp_get_recent_posts( array(
+				'numberposts' => $number_of_posts,
+				'post_type' => $post_type,
+				'post_status' => 'publish' ) )
+			);
+		}
+
 		foreach ( $recent_posts as $post ) {
 			$result .= '<li><a href="' . get_permalink( $post["ID"] ) . '" title="Read ' . $post["post_title"] . '.">'
 			           . $post["post_title"] . '</a><span class="netview-date">'
