@@ -37,7 +37,8 @@ class Network_Single_Shortcode extends Network_Summary_Shortcode {
 		$result .= wpautop( do_shortcode( site_description() ) );
 		if ( $this->args['numposts'] > 0 ) {
 			$result .= '<h4>Recent Posts</h4>';
-			$result .= $this->get_recent_posts( $this->args['numposts'], $dateFormat );
+			// TODO integrate post type parameter here as well
+			$result .= $this->get_recent_posts( $this->args['numposts'], array('post'), $dateFormat );
 		}
 		$result .= '</div></div>';
 
